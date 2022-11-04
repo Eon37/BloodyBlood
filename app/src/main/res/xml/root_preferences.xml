@@ -1,0 +1,101 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="Period">
+        <EditTextPreference
+            android:key="startDay"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Approximate start day"
+            android:dialogLayout="@layout/_number_text_edit"
+            app:dialogMessage="Set the day"
+            app:dialogTitle="Approximate start day"
+            app:icon="@android:drawable/ic_menu_day"
+            app:persistent="true"
+            app:summary="The approximate day of start in the current month\nUsed only at the first time for calculating when to send the first notification\nThe change of this value results in recalculating the next notification day" />
+        <EditTextPreference
+            android:key="period"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Period"
+            android:dialogLayout="@layout/_number_text_edit"
+            app:defaultValue="31"
+            app:dialogMessage="Set the period"
+            app:dialogTitle="Period"
+            app:icon="@android:drawable/ic_menu_month"
+            app:persistent="true"
+            app:summary="Usual amount of days between the starts" />
+        <EditTextPreference
+            android:defaultValue="5"
+            android:key="duration"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Duration"
+            android:dialogLayout="@layout/_number_text_edit"
+            app:dialogMessage="Set the duration"
+            app:dialogTitle="Duration"
+            app:icon="@android:drawable/ic_menu_week"
+            app:persistent="true"
+            app:summary="Used to change the background" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Notifications">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="repeatStart"
+            android:title="Repeat start notification"
+            app:persistent="true" />
+        <EditTextPreference
+            android:defaultValue="3"
+            android:key="repeatStartAfter"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Repeat start notification after"
+            android:dialogLayout="@layout/_number_text_edit"
+            app:dialogMessage="Set the amount of days"
+            app:dialogTitle="Repeat start notification after"
+            app:persistent="true"
+            app:summary="Specify the amount of days to send repeat notification" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="enableEnd"
+            android:title="Enable end notification"
+            app:persistent="true"
+            app:summary="Used to change the background\nCalculated using duration" />
+        <EditTextPreference
+            android:defaultValue="3"
+            android:key="repeatEndAfter"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Repeat end notification after"
+            android:dialogLayout="@layout/_number_text_edit"
+            app:dialogMessage="Set the amount of days"
+            app:dialogTitle="Repeat end notification after"
+            app:summary="Specify the amount of days to send repeat notification" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="enableConcreteDay"
+            android:title="Enable specifying concrete day"
+            app:persistent="true"
+            app:summary="If notification was late few days after the start or the end you can specify the exact number\nAffects both the start and the end notifications" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="enableDelay"
+            android:title="Enable delay notification"
+            app:persistent="true" />
+        <EditTextPreference
+            android:defaultValue="10"
+            android:key="delayDays"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="The amount of delay days"
+            android:dialogLayout="@layout/_number_text_edit"
+            app:dialogMessage="Set the amount of days"
+            app:dialogTitle="The amount of delay days"
+            app:persistent="true"
+            app:summary="Set the amount of days after which you recieve a notification about delay" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Appearance (In developement)" />
+
+</PreferenceScreen>
