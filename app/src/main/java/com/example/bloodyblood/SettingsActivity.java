@@ -2,17 +2,16 @@ package com.example.bloodyblood;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 
-import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
 
 public class SettingsActivity extends AppCompatActivity {
+
+    private static final String START_DAY_KEY = "startDay";
+    private static final String PERIOD_KEY = "period";
+    private static final String DURATION_KEY = "duration";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +39,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-            Log.d(this.toString(), "!!!!key = " + s);
+            switch (s) {
+                case START_DAY_KEY:
+                case PERIOD_KEY:
+                case DURATION_KEY:
+                    NotificationService.recalculateTimings(this.getContext(), sharedPreferences);
+                    break;
+            }
         }
     }
 }
