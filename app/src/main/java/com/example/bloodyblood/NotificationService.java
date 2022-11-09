@@ -16,10 +16,6 @@ import java.time.ZonedDateTime;
 
 public class NotificationService {
 
-    private static final String START_DAY_KEY = "startDay";
-    private static final String PERIOD_KEY = "period";
-    private static final String DURATION_KEY = "duration";
-
     private NotificationService() {}
 
     public static void recalculateTimings(Context context, SharedPreferences sharedPreferences) {
@@ -28,9 +24,9 @@ public class NotificationService {
             return;
         }
 
-        int startDay = Integer.parseInt(sharedPreferences.getString(START_DAY_KEY, "1"));
-        int period = Integer.parseInt(sharedPreferences.getString(PERIOD_KEY, "31"));
-        int duration = Integer.parseInt(sharedPreferences.getString(DURATION_KEY, "5"));
+        int startDay = Integer.parseInt(sharedPreferences.getString(StringConstants.START_DAY_KEY, "1"));
+        int period = Integer.parseInt(sharedPreferences.getString(StringConstants.PERIOD_KEY, "31"));
+        int duration = Integer.parseInt(sharedPreferences.getString(StringConstants.DURATION_KEY, "5"));
 
         setNotifications(context, calculateNext(LocalDate.now(), startDay, period), period, duration);
     }

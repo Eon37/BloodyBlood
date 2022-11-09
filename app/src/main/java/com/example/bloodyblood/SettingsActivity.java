@@ -9,10 +9,6 @@ import androidx.preference.PreferenceFragmentCompat;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private static final String START_DAY_KEY = "startDay";
-    private static final String PERIOD_KEY = "period";
-    private static final String DURATION_KEY = "duration";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +36,9 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
             switch (s) {
-                case START_DAY_KEY:
-                case PERIOD_KEY:
-                case DURATION_KEY:
+                case StringConstants.START_DAY_KEY:
+                case StringConstants.PERIOD_KEY:
+                case StringConstants.DURATION_KEY:
                     NotificationService.recalculateTimings(this.getContext(), sharedPreferences);
                     break;
             }
