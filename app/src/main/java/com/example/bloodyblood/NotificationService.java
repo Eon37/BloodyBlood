@@ -11,17 +11,14 @@ import android.util.Log;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.YearMonth;
 import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
+import java.time.ZonedDateTime;
 
 public class NotificationService {
 
     private static final String START_DAY_KEY = "startDay";
     private static final String PERIOD_KEY = "period";
     private static final String DURATION_KEY = "duration";
-    private static final String NEXT_START_DAY = "duration";
 
     private NotificationService() {}
 
@@ -35,7 +32,13 @@ public class NotificationService {
         int period = Integer.parseInt(sharedPreferences.getString(PERIOD_KEY, "31"));
         int duration = Integer.parseInt(sharedPreferences.getString(DURATION_KEY, "5"));
 
-        LocalDate currentDate = LocalDate.now();
+        setNotifications(context, calculateNext(LocalDate.now(), startDay, period), period, duration);
+    }
+
+    private static ZonedDateTime calculateNext(LocalDate currentDate, int startDay, int period) {
+        int year = currentDate.getYear();
+        Month month = currentDate.getMonth();
+        int day = startDay;
 
         if (currentDate.isAfter(LocalDate.of(currentDate.getYear(), currentDate.getMonth(), startDay))) {
             int lengthOfMonth = currentDate.lengthOfMonth();
@@ -43,28 +46,22 @@ public class NotificationService {
             boolean nextMonth = tmpNext > lengthOfMonth;
             int nextStartDay = nextMonth ? tmpNext % lengthOfMonth : tmpNext;
 
-            if (nextMonth) {
-                if (Month.DECEMBER == currentDate.getMonth()) {
-                    setNextNotification(context, LocalDate.of(currentDate.getYear() + 1, Month.JANUARY, nextStartDay), period, duration);
-                } else {
-                    setNextNotification(context, LocalDate.of(currentDate.getYear(), currentDate.getMonth().plus(1), nextStartDay), period, duration);
-                }
-            } else {
-                setNextNotification(context, LocalDate.of(currentDate.getYear(), currentDate.getMonth(), nextStartDay), period, duration);
-            }
-        } else {
-            setNextNotification(context, LocalDate.of(currentDate.getYear(), currentDate.getMonth(), startDay), period, duration);
+            year = nextMonth && Month.DECEMBER == currentDate.getMonth() ? currentDate.getYear() + 1 : year;
+            month = nextMonth ? currentDate.getMonth().plus(1) : month;
+            day = nextMonth ? nextStartDay : day;
         }
+
+        return LocalDate.of(year, month, day).atStartOfDay(ZoneId.systemDefault());
     }
 
-    private static void setNextNotification(Context context, LocalDate date, int period, int duration) {
+    private static void setNotifications(Context context, ZonedDateTime date, int period, int duration) {
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Intent startIntent = new Intent(context, NotificationDisplay.class);
 //        Intent endIntent = new Intent("com.example.bloodyblood.action.END_NOTIFICATION");
 
         //set start notification
         am.setRepeating(AlarmManager.RTC,
-                date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli(),
+                date.toInstant().toEpochMilli(),
                 AlarmManager.INTERVAL_DAY * period,
                 PendingIntent.getBroadcast(context, 100, startIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
