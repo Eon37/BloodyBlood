@@ -1,8 +1,10 @@
-package com.example.bloodyblood;
+package com.example.bloodyblood.notifications;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.bloodyblood.R;
 
 public class StartNotificationActivity extends AppCompatActivity {
 

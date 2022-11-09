@@ -1,4 +1,4 @@
-package com.example.bloodyblood;
+package com.example.bloodyblood.notifications;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+
+import com.example.bloodyblood.StringConstants;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -53,7 +55,10 @@ public class NotificationService {
     private static void setNotifications(Context context, ZonedDateTime date, int period, int duration) {
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Intent startIntent = new Intent(context, NotificationDisplay.class);
-//        Intent endIntent = new Intent("com.example.bloodyblood.action.END_NOTIFICATION");
+        startIntent.putExtra(StringConstants.IS_START_NOTIFICATION, true);
+
+        Intent endIntent = new Intent(context, NotificationDisplay.class);
+        endIntent.putExtra(StringConstants.IS_START_NOTIFICATION, false);
 
         //set start notification
         am.setRepeating(AlarmManager.RTC,
@@ -62,9 +67,9 @@ public class NotificationService {
                 PendingIntent.getBroadcast(context, 100, startIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
         //set end notification
-//        am.setRepeating(AlarmManager.RTC,
-//                date.plusDays(duration).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli(),
-//                TimeUnit.DAYS.toMillis(period),
-//                PendingIntent.getBroadcast(context, 100, endIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        am.setRepeating(AlarmManager.RTC,
+                date.plusDays(duration).toInstant().toEpochMilli(),
+                AlarmManager.INTERVAL_DAY * period,
+                PendingIntent.getBroadcast(context, 200, endIntent, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 }
