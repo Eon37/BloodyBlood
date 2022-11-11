@@ -26,7 +26,7 @@
             app:persistent="true"
             app:summary="Usual amount of days between the starts" />
         <EditTextPreference
-            android:defaultValue="5"
+            android:defaultValue="3"
             android:key="duration"
             android:selectAllOnFocus="true"
             android:singleLine="true"
@@ -42,58 +42,27 @@
     <PreferenceCategory app:title="Notifications">
         <SwitchPreference
             android:defaultValue="false"
-            android:key="repeatStart"
-            android:title="Repeat start notification"
-            app:persistent="true" />
-        <EditTextPreference
-            android:defaultValue="3"
-            android:key="repeatStartAfter"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="Repeat start notification after"
-            android:dialogLayout="@layout/_number_text_edit"
-            app:dialogMessage="Set the amount of days"
-            app:dialogTitle="Repeat start notification after"
-            app:persistent="true"
-            app:summary="Specify the amount of days to send repeat notification" />
-        <SwitchPreference
-            android:defaultValue="false"
             android:key="enableEnd"
             android:title="Enable end notification"
             app:persistent="true"
             app:summary="Used to change the background\nCalculated using duration" />
-        <EditTextPreference
-            android:defaultValue="3"
-            android:key="repeatEndAfter"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="Repeat end notification after"
-            android:dialogLayout="@layout/_number_text_edit"
-            app:dialogMessage="Set the amount of days"
-            app:dialogTitle="Repeat end notification after"
-            app:summary="Specify the amount of days to send repeat notification" />
         <SwitchPreference
             android:defaultValue="false"
-            android:key="enableConcreteDay"
-            android:title="Enable specifying concrete day"
+            android:key="enableExactDay"
+            android:title="Enable specifying exact day"
             app:persistent="true"
             app:summary="If notification was late few days after the start or the end you can specify the exact number\nAffects both the start and the end notifications" />
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="enableDelay"
-            android:title="Enable delay notification"
-            app:persistent="true" />
         <EditTextPreference
-            android:defaultValue="10"
-            android:key="delayDays"
+            android:defaultValue="5"
+            android:key="repeatNotificationAfter"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="The amount of delay days"
+            android:title="Repeat notification after"
             android:dialogLayout="@layout/_number_text_edit"
             app:dialogMessage="Set the amount of days"
-            app:dialogTitle="The amount of delay days"
+            app:dialogTitle="Repeat notification after"
             app:persistent="true"
-            app:summary="Set the amount of days after which you recieve a notification about delay" />
+            app:summary="Specify the amount of days to send repeat notification if 'No' button pressed" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Appearance (In developement)" />

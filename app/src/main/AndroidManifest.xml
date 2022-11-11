@@ -29,10 +29,8 @@
                 android:parentActivityName=".MainActivity"/>
         </activity>
 
-        <activity android:name=".notifications.StartNotificationActivity" />
-        <activity android:name=".notifications.EndNotificationActivity" />
-
-        <receiver android:name=".notifications.NotificationDisplay"/>
+        <receiver android:name=".notifications.MainNotificationDisplay"/>
+        <receiver android:name=".notifications.RepeatNotificationSchedule"/>
     </application>
 
 </manifest>

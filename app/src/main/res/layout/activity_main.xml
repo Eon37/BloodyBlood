@@ -4,17 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient"
+    android:background="@drawable/background_black_white_gradient"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:id="@+id/activity_main_id">
 
     <TextView
+        android:id="@+id/activity_main_text_view_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/black_gradient"
+        android:background="@drawable/black_white_gradient"
         android:fontFamily="serif"
         android:text="Bloody Blood"
-        android:textColor="#f00"
+        android:textColor="#fff"
         android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
