@@ -64,7 +64,7 @@ public class MainNotificationDisplay extends BroadcastReceiver {
                 .setContentTitle(isStart ? "Start titile" : "End titile")
                 .setContentText(isStart ? "Start sext" : "End sext")
                 .setAutoCancel(true)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.blood_icon)
                 .addAction(yesAction)
                 .addAction(noAction)
                 .setColor(isCalmBg ? Color.BLACK : Color.RED)
