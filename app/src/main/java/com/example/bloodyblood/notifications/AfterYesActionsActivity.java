@@ -10,7 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
-import com.example.bloodyblood.RequestCodes;
+import com.example.bloodyblood.enums.NotificationIds;
+import com.example.bloodyblood.enums.RequestCodes;
 import com.example.bloodyblood.StringConstants;
 
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ public class AfterYesActionsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        NotificationService.cancelNotification(this, NotificationIds.MAIN_NOTIFICATION);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         int duration = Integer.parseInt(prefs.getString(StringConstants.DURATION_KEY, "3"));
@@ -30,6 +32,9 @@ public class AfterYesActionsActivity extends AppCompatActivity {
 
         prefs.edit().putBoolean(StringConstants.IS_CALM_BG, !isStart).apply();
 
+        //todo if isStart calculate next start day and save history.
+        // After calculation it will reset notification in change preference listener
+        // if !isStart save history
 //        if (isStart) {
 //            prefs.edit().putString(StringConstants.START_DAY_KEY, String.valueOf(LocalDate.now().getDayOfMonth())).commit();
 //        }

@@ -13,8 +13,9 @@ import android.graphics.drawable.Icon;
 
 import androidx.preference.PreferenceManager;
 
+import com.example.bloodyblood.enums.NotificationIds;
 import com.example.bloodyblood.R;
-import com.example.bloodyblood.RequestCodes;
+import com.example.bloodyblood.enums.RequestCodes;
 import com.example.bloodyblood.StringConstants;
 
 public class MainNotificationDisplay extends BroadcastReceiver {
@@ -29,7 +30,7 @@ public class MainNotificationDisplay extends BroadcastReceiver {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationChannel channel = new NotificationChannel(NotificationService.CHANNEL_ID, "bloodyblood", NotificationManager.IMPORTANCE_DEFAULT);
         notificationManager.createNotificationChannel(channel);
-        notificationManager.notify(0, notification);
+        notificationManager.notify(NotificationIds.MAIN_NOTIFICATION.ordinal(), notification);
     }
 
     private Notification constructMainNotification(Context context, boolean isStart, boolean isCalmBg) {
