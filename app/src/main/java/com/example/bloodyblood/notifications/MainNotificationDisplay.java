@@ -33,7 +33,7 @@ public class MainNotificationDisplay extends BroadcastReceiver {
     }
 
     private Notification constructMainNotification(Context context, boolean isStart, boolean isCalmBg) {
-        Intent afterStart = new Intent(context, AfterYesActionsActivity.class); //todo delete afterendactionsactivity?
+        Intent afterStart = new Intent(context, AfterYesActionsActivity.class);
         afterStart.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
         PendingIntent afterStartPendingIntent = PendingIntent.getActivity(
                 context,

@@ -19,15 +19,10 @@ public class RepeatNotificationSchedule extends BroadcastReceiver {
 
         boolean isStart = intent.getBooleanExtra(StringConstants.IS_START_NOTIFICATION, true);
         int repeatAfter = Integer.parseInt(prefs.getString(StringConstants.REPEAT_NOTIFICATION_AFTER, "5"));
-        if (isStart) {
-            int delay = prefs.getInt(StringConstants.DELAY, 0); //todo reset on start yes
-
-            delay += repeatAfter;
-            prefs.edit().putInt(StringConstants.DELAY, delay).apply();
-        }
 
         NotificationService.setMainNotification(
                 context,
+                isStart,
                 LocalDate.now().plusDays(repeatAfter).atStartOfDay(ZoneId.systemDefault()));
     }
 }

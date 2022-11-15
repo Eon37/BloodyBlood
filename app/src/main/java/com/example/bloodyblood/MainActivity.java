@@ -19,6 +19,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        changeColors();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        changeColors();
+    }
+
+    private void changeColors() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isCalmBg = prefs.getBoolean(StringConstants.IS_CALM_BG, true);
 

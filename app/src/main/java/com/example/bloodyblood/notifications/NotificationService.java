@@ -36,7 +36,8 @@ public class NotificationService {
         int startDay = Integer.parseInt(sharedPreferences.getString(StringConstants.START_DAY_KEY, "1"));
         int period = Integer.parseInt(sharedPreferences.getString(StringConstants.PERIOD_KEY, "31"));
 
-        setMainNotification(context, calculateNext(LocalDate.now(), startDay, period));
+        sharedPreferences.edit().putBoolean(StringConstants.IS_CALM_BG, true).commit();
+        setMainNotification(context, true, calculateNext(LocalDate.now(), startDay, period));
     }
 
     private static ZonedDateTime calculateNext(LocalDate currentDate, int startDay, int period) {
@@ -58,20 +59,17 @@ public class NotificationService {
         return LocalDate.of(year, month, day).atStartOfDay(ZoneId.systemDefault());
     }
 
-    public static void setMainNotification(Context context, ZonedDateTime date) {
+    public static void setMainNotification(Context context, boolean isStart, ZonedDateTime date) {
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        Intent startIntent = new Intent(context, MainNotificationDisplay.class);
-        startIntent.putExtra(StringConstants.IS_START_NOTIFICATION, true);
+        Intent firstIntent = new Intent(context, MainNotificationDisplay.class);
+        firstIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
 
         //set next start notification
         am.set(AlarmManager.RTC,
                 date.toInstant().toEpochMilli(),
-                PendingIntent.getBroadcast(context, RequestCodes.MAIN_NOTIFICATION.ordinal(), startIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-
-        //set end notification todo should be calculated after really started
-//        am.setRepeating(AlarmManager.RTC,
-//                date.plusDays(duration).toInstant().toEpochMilli(),
-//                AlarmManager.INTERVAL_DAY * period,
-//                PendingIntent.getBroadcast(context, 200, endIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+                PendingIntent.getBroadcast(context,
+                        RequestCodes.MAIN_NOTIFICATION.ordinal(),
+                        firstIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT));
     }
 }

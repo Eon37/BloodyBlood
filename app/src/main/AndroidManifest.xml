@@ -29,6 +29,9 @@
                 android:parentActivityName=".MainActivity"/>
         </activity>
 
+        <activity android:name=".notifications.AfterYesActionsActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name=".notifications.SilentEndActionActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
         <receiver android:name=".notifications.MainNotificationDisplay"/>
         <receiver android:name=".notifications.RepeatNotificationSchedule"/>
     </application>
