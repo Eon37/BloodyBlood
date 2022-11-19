@@ -21,10 +21,10 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-public class NotificationService {
+public class NotificationUtils {
     public static final String CHANNEL_ID = "com.example.bloodyblood.channelId";
 
-    private NotificationService() {}
+    private NotificationUtils() {}
 
     public static void recalculateTimings(Context context, SharedPreferences sharedPreferences) {
         if (context == null) {
@@ -38,7 +38,15 @@ public class NotificationService {
         setMainNotification(context, true, calculateNext(LocalDate.now(), startDay, period));
     }
 
-    private static ZonedDateTime calculateNext(LocalDate currentDate, int startDay, int period) {
+    /**
+     * Calculates the next day to send first notification after the specified period.
+     * If start day is today then the next day is also today.
+     * @param currentDate - today's date
+     * @param startDay - the day month at which first notification of start should appear
+     * @param period - period for calculating if the next day in the current month/year
+     * @return the day to send notification
+     */
+    public static ZonedDateTime calculateNext(LocalDate currentDate, int startDay, int period) {
         int year = currentDate.getYear();
         Month month = currentDate.getMonth();
         int day = startDay;
@@ -71,6 +79,28 @@ public class NotificationService {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         prefs.edit().putLong(code.name(), nextAlarmTime).apply();
+    }
+
+    public static void setEndNotification(Context context, ZonedDateTime date) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean endEnabled = prefs.getBoolean(StringConstants.END_NOTIFICATION_ENABLED, false);
+        RequestCodes endCode = endEnabled ? RequestCodes.END_NOTIFICATION : RequestCodes.SILENT_END_ACTIONS;
+
+        Intent endIntent = new Intent(context, endEnabled ? MainNotificationDisplayReceiver.class : SilentEndActionReceiver.class);
+        endIntent.putExtra(StringConstants.IS_START_NOTIFICATION, false);
+        PendingIntent endPendingIntent = PendingIntent.getBroadcast(
+                context,
+                endCode.ordinal(),
+                endIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long nextAlarmTime = date.toInstant().toEpochMilli();
+
+        AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        am.set(AlarmManager.RTC, nextAlarmTime, endPendingIntent);
+
+        prefs.edit().putLong(endCode.name(), nextAlarmTime).apply();
+
     }
 
     public static void cancelNotification(Context context, NotificationIds id) {

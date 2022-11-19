@@ -7,7 +7,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.example.bloodyblood.notifications.NotificationService;
+import com.example.bloodyblood.notifications.NotificationUtils;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -40,8 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
             switch (s) {
                 case StringConstants.START_DAY_KEY:
                 case StringConstants.PERIOD_KEY:
-                case StringConstants.DURATION_KEY:
-                    NotificationService.recalculateTimings(this.getContext(), sharedPreferences);
+                    NotificationUtils.recalculateTimings(this.getContext(), sharedPreferences);
                     break;
             }
         }

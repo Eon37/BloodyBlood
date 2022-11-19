@@ -28,7 +28,7 @@ public class MainNotificationDisplayReceiver extends BroadcastReceiver {
         Notification notification = constructMainNotification(context, isStart, isCalmBg);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationChannel channel = new NotificationChannel(NotificationService.CHANNEL_ID, "bloodyblood", NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationChannel channel = new NotificationChannel(NotificationUtils.CHANNEL_ID, "bloodyblood", NotificationManager.IMPORTANCE_DEFAULT);
         notificationManager.createNotificationChannel(channel);
         notificationManager.notify(NotificationIds.MAIN_NOTIFICATION.ordinal(), notification);
     }
@@ -60,7 +60,7 @@ public class MainNotificationDisplayReceiver extends BroadcastReceiver {
                 repeatPendingIntent)
                 .build();
 
-        return new Notification.Builder(context, NotificationService.CHANNEL_ID)
+        return new Notification.Builder(context, NotificationUtils.CHANNEL_ID)
                 .setContentTitle(isStart ? "Start titile" : "End titile")
                 .setContentText(isStart ? "Start sext" : "End sext")
                 .setAutoCancel(true)
