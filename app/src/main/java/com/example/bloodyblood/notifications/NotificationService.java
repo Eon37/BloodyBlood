@@ -58,14 +58,14 @@ public class NotificationService {
 
     public static void setMainNotification(Context context, boolean isStart, ZonedDateTime date) {
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        Intent firstIntent = new Intent(context, MainNotificationDisplay.class);
+        Intent firstIntent = new Intent(context, MainNotificationDisplayReceiver.class);
         firstIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
 
         //set next start notification
         am.set(AlarmManager.RTC,
                 date.toInstant().toEpochMilli(),
                 PendingIntent.getBroadcast(context,
-                        RequestCodes.MAIN_NOTIFICATION.ordinal(),
+                        isStart ? RequestCodes.MAIN_NOTIFICATION.ordinal() : RequestCodes.END_NOTIFICATION.ordinal(),
                         firstIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT));
     }

@@ -18,7 +18,7 @@ import com.example.bloodyblood.R;
 import com.example.bloodyblood.enums.RequestCodes;
 import com.example.bloodyblood.StringConstants;
 
-public class MainNotificationDisplay extends BroadcastReceiver {
+public class MainNotificationDisplayReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -34,9 +34,9 @@ public class MainNotificationDisplay extends BroadcastReceiver {
     }
 
     private Notification constructMainNotification(Context context, boolean isStart, boolean isCalmBg) {
-        Intent afterStart = new Intent(context, AfterYesActionsActivity.class);
+        Intent afterStart = new Intent(context, AfterYesActionsReceiver.class);
         afterStart.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
-        PendingIntent afterStartPendingIntent = PendingIntent.getActivity(
+        PendingIntent afterStartPendingIntent = PendingIntent.getBroadcast(
                 context,
                 RequestCodes.YES_ACTION.ordinal(),
                 afterStart,
@@ -47,9 +47,9 @@ public class MainNotificationDisplay extends BroadcastReceiver {
                 afterStartPendingIntent)
                 .build();
 
-        Intent repeatIntent = new Intent(context, RepeatNotificationSchedule.class);
+        Intent repeatIntent = new Intent(context, RepeatNotificationScheduleReceiver.class);
         repeatIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
-        PendingIntent repeatPendingIntent = PendingIntent.getBroadcast( //todo mb activity (invisible?) also?
+        PendingIntent repeatPendingIntent = PendingIntent.getBroadcast(
                 context,
                 RequestCodes.NO_ACTION.ordinal(),
                 repeatIntent,

@@ -29,11 +29,10 @@
                 android:parentActivityName=".MainActivity"/>
         </activity>
 
-        <activity android:name=".notifications.AfterYesActionsActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-        <activity android:name=".notifications.SilentEndActionActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-
-        <receiver android:name=".notifications.MainNotificationDisplay"/>
-        <receiver android:name=".notifications.RepeatNotificationSchedule"/>
+        <receiver android:name=".notifications.MainNotificationDisplayReceiver"/>
+        <receiver android:name=".notifications.RepeatNotificationScheduleReceiver"/>
+        <receiver android:name=".notifications.AfterYesActionsReceiver"/>
+        <receiver android:name=".notifications.SilentEndActionReceiver"/>
     </application>
 
 </manifest>

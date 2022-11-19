@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-public class RepeatNotificationSchedule extends BroadcastReceiver {
+public class RepeatNotificationScheduleReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationService.cancelNotification(context, NotificationIds.MAIN_NOTIFICATION);
