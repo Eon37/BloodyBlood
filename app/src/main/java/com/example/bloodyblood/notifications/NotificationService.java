@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.preference.PreferenceManager;
+
 import com.example.bloodyblood.enums.NotificationIds;
 import com.example.bloodyblood.enums.RequestCodes;
 import com.example.bloodyblood.StringConstants;
@@ -33,6 +35,7 @@ public class NotificationService {
         int startDay = Integer.parseInt(sharedPreferences.getString(StringConstants.START_DAY_KEY, "1"));
         int period = Integer.parseInt(sharedPreferences.getString(StringConstants.PERIOD_KEY, "31"));
 
+        //todo clear?
         sharedPreferences.edit().putBoolean(StringConstants.IS_CALM_BG, true).commit();
         setMainNotification(context, true, calculateNext(LocalDate.now(), startDay, period));
     }
@@ -61,13 +64,15 @@ public class NotificationService {
         Intent firstIntent = new Intent(context, MainNotificationDisplayReceiver.class);
         firstIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
 
-        //set next start notification
+        RequestCodes code = isStart ? RequestCodes.MAIN_NOTIFICATION : RequestCodes.END_NOTIFICATION;
+        long nextAlarmTime = date.toInstant().toEpochMilli();
+
         am.set(AlarmManager.RTC,
-                date.toInstant().toEpochMilli(),
-                PendingIntent.getBroadcast(context,
-                        isStart ? RequestCodes.MAIN_NOTIFICATION.ordinal() : RequestCodes.END_NOTIFICATION.ordinal(),
-                        firstIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT));
+                nextAlarmTime,
+                PendingIntent.getBroadcast(context, code.ordinal(), firstIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putLong(code.name(), nextAlarmTime).apply();
     }
 
     public static void cancelNotification(Context context, NotificationIds id) {

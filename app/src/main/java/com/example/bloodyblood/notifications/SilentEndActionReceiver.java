@@ -13,14 +13,7 @@ public class SilentEndActionReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-//    @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
         prefs.edit().putBoolean(StringConstants.IS_CALM_BG, true).apply();
-
-//        finish();
-//    }
     }
 }

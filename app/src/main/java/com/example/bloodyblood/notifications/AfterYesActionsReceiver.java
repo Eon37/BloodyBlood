@@ -44,18 +44,26 @@ public class AfterYesActionsReceiver extends BroadcastReceiver {
         }
 
         if (isStart) {
+            RequestCodes endCode = endEnabled? RequestCodes.END_NOTIFICATION : RequestCodes.SILENT_END_ACTIONS;
+
             Intent endIntent = new Intent(context, endEnabled ? MainNotificationDisplayReceiver.class : SilentEndActionReceiver.class);
             endIntent.putExtra(StringConstants.IS_START_NOTIFICATION, false);
             PendingIntent endPendingIntent = PendingIntent.getBroadcast(
                     context,
-                    endEnabled ? RequestCodes.END_NOTIFICATION.ordinal() : RequestCodes.SILENT_END_ACTIONS.ordinal(),
+                    endCode.ordinal(),
                     endIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
+            long nextAlarmTime = LocalDate.now()
+                    .plusDays(duration)
+                    .atStartOfDay(ZoneId.systemDefault())
+                    .toInstant()
+                    .toEpochMilli();
+
             AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-            am.set(AlarmManager.RTC,
-                    LocalDate.now().plusDays(duration).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli(),
-                    endPendingIntent);
+            am.set(AlarmManager.RTC, nextAlarmTime, endPendingIntent);
+
+            prefs.edit().putLong(endCode.name(), nextAlarmTime).apply();
         }
     }
 }
