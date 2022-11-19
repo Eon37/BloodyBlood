@@ -35,8 +35,6 @@ public class NotificationService {
         int startDay = Integer.parseInt(sharedPreferences.getString(StringConstants.START_DAY_KEY, "1"));
         int period = Integer.parseInt(sharedPreferences.getString(StringConstants.PERIOD_KEY, "31"));
 
-        //todo clear?
-        sharedPreferences.edit().putBoolean(StringConstants.IS_CALM_BG, true).commit();
         setMainNotification(context, true, calculateNext(LocalDate.now(), startDay, period));
     }
 
