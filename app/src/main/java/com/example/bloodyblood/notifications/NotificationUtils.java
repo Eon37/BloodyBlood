@@ -45,11 +45,13 @@ public class NotificationUtils {
     }
 
     /**
-     * Calculates the next day to send first notification after the specified period.
-     * If start day is today then the next day is also today.
+     * Calculates the next day to send first notification
+     * If start day is today then the next day is also today
+     * If start day is in the past days of the current month, then the next day is after the period
+     * If start day is later in the current month, then the next day is at that date
      * @param currentDate - today's date
-     * @param startDay - the day month at which first notification of start should appear
-     * @param period - period for calculating if the next day in the current month/year
+     * @param startDay - the day of the current month when already started or will start
+     * @param period - the period for calculating if the next day is in the current month/year
      * @return the day to send notification
      */
     public static ZonedDateTime calculateNext(LocalDate currentDate, int startDay, int period) {
