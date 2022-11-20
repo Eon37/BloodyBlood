@@ -33,6 +33,7 @@
         <receiver android:name=".notifications.RepeatNotificationScheduleReceiver"/>
         <receiver android:name=".notifications.AfterYesActionsReceiver"/>
         <receiver android:name=".notifications.SilentEndActionReceiver"/>
+        <receiver android:name=".notifications.ExactDaysInputReceiver"/>
 
         <receiver android:name=".notifications.RebootReceiver" android:enabled="true" android:exported="true">
             <intent-filter>

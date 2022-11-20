@@ -23,7 +23,12 @@ public class RebootReceiver extends BroadcastReceiver {
         if (mainNotificationTime > 0) {
             Intent firstIntent = new Intent(context, MainNotificationDisplayReceiver.class);
             firstIntent.putExtra(StringConstants.IS_START_NOTIFICATION, true);
-            PendingIntent mainPendingIntent = PendingIntent.getBroadcast(context, RequestCodes.MAIN_NOTIFICATION.ordinal(), firstIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent mainPendingIntent = PendingIntent.getBroadcast(
+                    context,
+                    RequestCodes.MAIN_NOTIFICATION.ordinal(),
+                    firstIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
             am.set(AlarmManager.RTC, mainNotificationTime, mainPendingIntent);
         }
 

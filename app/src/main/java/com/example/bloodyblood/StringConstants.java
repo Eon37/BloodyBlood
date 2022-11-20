@@ -9,4 +9,5 @@ public class StringConstants {
     public static final String REPEAT_NOTIFICATION_AFTER = "repeatNotificationAfter";
     public static final String EXACT_DAY_ENABLED = "enableExactDay";
     public static final String END_NOTIFICATION_ENABLED = "enableEnd";
+    public static final String INPUT_EXACT_DAYS = "inputExactDays";
 }

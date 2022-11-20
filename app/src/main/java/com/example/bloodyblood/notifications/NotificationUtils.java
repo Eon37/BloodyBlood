@@ -3,15 +3,20 @@ package com.example.bloodyblood.notifications;
 import static android.content.Context.ALARM_SERVICE;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.RemoteInput;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.Icon;
 import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
+import com.example.bloodyblood.R;
 import com.example.bloodyblood.enums.NotificationIds;
 import com.example.bloodyblood.enums.RequestCodes;
 import com.example.bloodyblood.StringConstants;
@@ -23,6 +28,7 @@ import java.time.ZonedDateTime;
 
 public class NotificationUtils {
     public static final String CHANNEL_ID = "com.example.bloodyblood.channelId";
+    public static final String CHANNEL_NAME = "bloodyblood";
 
     private NotificationUtils() {}
 
@@ -101,6 +107,77 @@ public class NotificationUtils {
 
         prefs.edit().putLong(endCode.name(), nextAlarmTime).apply();
 
+    }
+
+    public static Notification constructMainNotification(Context context, boolean isStart, boolean isCalmBg) {
+        Intent afterStart = new Intent(context, AfterYesActionsReceiver.class);
+        afterStart.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
+        PendingIntent afterStartPendingIntent = PendingIntent.getBroadcast(
+                context,
+                RequestCodes.YES_ACTION.ordinal(),
+                afterStart,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        Notification.Action yesAction = new Notification.Action.Builder(
+                Icon.createWithResource(context, R.drawable.ic_launcher_foreground),
+                "Yes",
+                afterStartPendingIntent)
+                .build();
+
+        Intent repeatIntent = new Intent(context, RepeatNotificationScheduleReceiver.class);
+        repeatIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
+        PendingIntent repeatPendingIntent = PendingIntent.getBroadcast(
+                context,
+                RequestCodes.NO_ACTION.ordinal(),
+                repeatIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        Notification.Action noAction = new Notification.Action.Builder(
+                Icon.createWithResource(context, R.drawable.ic_launcher_foreground),
+                "No",
+                repeatPendingIntent)
+                .build();
+
+        return new Notification.Builder(context, NotificationUtils.CHANNEL_ID)
+                .setContentTitle(isStart ? "Start titile" : "End titile")
+                .setContentText(isStart ? "Start sext" : "End sext")
+                .setAutoCancel(false)
+                .setSmallIcon(R.drawable.blood_icon)
+                .addAction(yesAction)
+                .addAction(noAction)
+                .setOngoing(true)
+                .setColor(isCalmBg ? Color.BLACK : Color.RED)
+                .setColorized(true)
+                .build();
+    }
+
+    public static Notification constructExactDayNotification(Context context, boolean isStart) {
+        Intent remoteInputIntent = new Intent(context, ExactDaysInputReceiver.class);
+        remoteInputIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
+        PendingIntent remoteInputPendingIntent = PendingIntent.getBroadcast(
+                context,
+                RequestCodes.SPECIFY_EXACT_DAY.ordinal(),
+                remoteInputIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        Notification.Action inputAction = new Notification.Action.Builder(
+                Icon.createWithResource(context, R.drawable.ic_launcher_foreground),
+                "Set days (Numbers from 0 to 31 only)",
+                remoteInputPendingIntent)
+                .addRemoteInput(new RemoteInput.Builder(StringConstants.INPUT_EXACT_DAYS)
+                        .setLabel("Days since the " + (isStart ? "start" : "end"))
+                        .build())
+                .build();
+
+        return new Notification.Builder(context, NotificationUtils.CHANNEL_ID)
+                .setContentTitle("Exact days")
+                .setContentText(isStart
+                        ? "How long have you been bleeding already?"
+                        : "How long have you stopped bleeding already?")
+                .setAutoCancel(false)
+                .setSmallIcon(R.drawable.blood_icon)
+                .addAction(inputAction)
+                .setOngoing(true)
+                .setColor(isStart ? Color.RED : Color.BLACK)
+                .setColorized(true)
+                .build();
     }
 
     public static void cancelNotification(Context context, NotificationIds id) {

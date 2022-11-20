@@ -25,50 +25,11 @@ public class MainNotificationDisplayReceiver extends BroadcastReceiver {
         boolean isCalmBg = sharedPreferences.getBoolean(StringConstants.IS_CALM_BG, true);
         boolean isStart = intent.getBooleanExtra(StringConstants.IS_START_NOTIFICATION, true);
 
-        Notification notification = constructMainNotification(context, isStart, isCalmBg);
+        Notification notification = NotificationUtils.constructMainNotification(context, isStart, isCalmBg);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationChannel channel = new NotificationChannel(NotificationUtils.CHANNEL_ID, "bloodyblood", NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationChannel channel = new NotificationChannel(NotificationUtils.CHANNEL_ID, NotificationUtils.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
         notificationManager.createNotificationChannel(channel);
         notificationManager.notify(NotificationIds.MAIN_NOTIFICATION.ordinal(), notification);
-    }
-
-    private Notification constructMainNotification(Context context, boolean isStart, boolean isCalmBg) {
-        Intent afterStart = new Intent(context, AfterYesActionsReceiver.class);
-        afterStart.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
-        PendingIntent afterStartPendingIntent = PendingIntent.getBroadcast(
-                context,
-                RequestCodes.YES_ACTION.ordinal(),
-                afterStart,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification.Action yesAction = new Notification.Action.Builder(
-                Icon.createWithResource(context, R.drawable.ic_launcher_foreground),
-                "Yes",
-                afterStartPendingIntent)
-                .build();
-
-        Intent repeatIntent = new Intent(context, RepeatNotificationScheduleReceiver.class);
-        repeatIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
-        PendingIntent repeatPendingIntent = PendingIntent.getBroadcast(
-                context,
-                RequestCodes.NO_ACTION.ordinal(),
-                repeatIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification.Action noAction = new Notification.Action.Builder(
-                Icon.createWithResource(context, R.drawable.ic_launcher_foreground),
-                "No",
-                repeatPendingIntent)
-                .build();
-
-        return new Notification.Builder(context, NotificationUtils.CHANNEL_ID)
-                .setContentTitle(isStart ? "Start titile" : "End titile")
-                .setContentText(isStart ? "Start sext" : "End sext")
-                .setAutoCancel(true)
-                .setSmallIcon(R.drawable.blood_icon)
-                .addAction(yesAction)
-                .addAction(noAction)
-                .setColor(isCalmBg ? Color.BLACK : Color.RED)
-                .setColorized(true)
-                .build();
     }
 }
