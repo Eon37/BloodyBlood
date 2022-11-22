@@ -14,10 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/black_white_gradient"
-        android:fontFamily="serif"
+        android:fontFamily="@font/cloister_black"
         android:text="Bloody Blood"
         android:textColor="#fff"
-        android:textSize="36sp"
+        android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -29,11 +29,15 @@
         android:layout_gravity="center"
         android:orientation="vertical">
 
-        <CalendarView
-            android:id="@+id/simpleCalendarView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="#DDD" />
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ddd"
+            app:mcv_selectionColor="#000"
+            app:mcv_showOtherDates="all"
+            app:mcv_selectionMode="none"
+            app:mcv_tileSize="42dp"/>
 
     </LinearLayout>
 
@@ -48,6 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:fontFamily="@font/atomic_age"
             android:onClick="settingsBtn_onClick"
             android:text="Settings" />
     </LinearLayout>

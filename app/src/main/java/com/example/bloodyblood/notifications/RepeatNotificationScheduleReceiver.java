@@ -22,7 +22,7 @@ public class RepeatNotificationScheduleReceiver extends BroadcastReceiver {
 
         boolean isStart = intent.getBooleanExtra(StringConstants.IS_START_NOTIFICATION, true);
         int repeatAfter = Integer.parseInt(prefs.getString(StringConstants.REPEAT_NOTIFICATION_AFTER, "5"));
-        ZonedDateTime repeatDate = LocalDate.now().plusDays(repeatAfter).atStartOfDay(ZoneId.systemDefault());
+        LocalDate repeatDate = LocalDate.now().plusDays(repeatAfter);
 
         NotificationUtils.setMainNotification(context, isStart, repeatDate);
     }

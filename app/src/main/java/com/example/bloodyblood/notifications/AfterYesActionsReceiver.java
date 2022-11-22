@@ -3,25 +3,21 @@ package com.example.bloodyblood.notifications;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.RemoteInput;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.Icon;
-import android.widget.RemoteViews;
 
 import androidx.preference.PreferenceManager;
 
-import com.example.bloodyblood.R;
+import com.example.bloodyblood.DateUtils;
 import com.example.bloodyblood.enums.NotificationIds;
 import com.example.bloodyblood.StringConstants;
-import com.example.bloodyblood.enums.RequestCodes;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AfterYesActionsReceiver extends BroadcastReceiver {
 
@@ -45,17 +41,16 @@ public class AfterYesActionsReceiver extends BroadcastReceiver {
             notificationManager.createNotificationChannel(channel);
             notificationManager.notify(NotificationIds.EXACT_DAY_NOTIFICATION.ordinal(), notification);
         } else {
+            DateUtils.saveHistory(prefs, LocalDate.now(), isStart);
+
             if (isStart) {
                 NotificationUtils.setMainNotification(
                         context,
                         true,
-                        LocalDate.now().plusDays(period).atStartOfDay(ZoneId.systemDefault()));
+                        LocalDate.now().plusDays(period));
                 NotificationUtils.setEndNotification(
                         context,
-                        LocalDate.now().plusDays(duration).atStartOfDay(ZoneId.systemDefault()));
-                //todo save start history
-            } else {
-                //todo set end history
+                        LocalDate.now().plusDays(duration));
             }
         }
     }

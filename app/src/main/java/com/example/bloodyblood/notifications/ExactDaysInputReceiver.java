@@ -11,11 +11,14 @@ import android.os.Bundle;
 
 import androidx.preference.PreferenceManager;
 
+import com.example.bloodyblood.DateUtils;
 import com.example.bloodyblood.StringConstants;
 import com.example.bloodyblood.enums.NotificationIds;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ExactDaysInputReceiver extends BroadcastReceiver {
     @Override
@@ -42,18 +45,16 @@ public class ExactDaysInputReceiver extends BroadcastReceiver {
 
         NotificationUtils.cancelNotification(context, NotificationIds.EXACT_DAY_NOTIFICATION);
 
+        DateUtils.saveHistory(prefs, LocalDate.now().minusDays(exactDays), isStart);
+
         if (isStart) {
             NotificationUtils.setMainNotification(
                     context,
                     true,
-                    LocalDate.now().minusDays(exactDays).plusDays(period).atStartOfDay(ZoneId.systemDefault()));
+                    LocalDate.now().minusDays(exactDays).plusDays(period));
             NotificationUtils.setEndNotification(
                     context,
-                    LocalDate.now().minusDays(exactDays).plusDays(duration).atStartOfDay(ZoneId.systemDefault()));
-
-            //todo save history
-        } else {
-            //todo save history
+                    LocalDate.now().minusDays(exactDays).plusDays(duration));
         }
     }
 }

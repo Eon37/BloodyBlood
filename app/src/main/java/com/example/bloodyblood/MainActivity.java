@@ -12,6 +12,16 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
+import org.threeten.bp.LocalDate;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -20,13 +30,32 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         changeColors();
+
+        MaterialCalendarView calendarView = findViewById(R.id.calendarView);
+        calendarView.removeDecorators();
+        calendarView.addDecorator(new CalendarHistoryDecorator(this, extractHistoryDays()));
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private Collection<CalendarDay> extractHistoryDays() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        changeColors();
+        Set<String> starts = prefs.getStringSet(StringConstants.STARTS_SET, new HashSet<>());
+        Set<String> ends = prefs.getStringSet(StringConstants.ENDS_SET, new HashSet<>());
+
+        Iterator<String> startsIterator = starts.iterator();
+        Iterator<String> endsIterator = ends.iterator();
+        Collection<CalendarDay> extracted = new HashSet<>();
+        //todo consider config changes
+        while (startsIterator.hasNext()) {
+            LocalDate start = LocalDate.parse(startsIterator.next());
+            LocalDate end = endsIterator.hasNext() ? LocalDate.parse(endsIterator.next()) : LocalDate.now();
+
+            for (LocalDate ld = start; !ld.isAfter(end); ld = ld.plusDays(1)) {
+                extracted.add(CalendarDay.from(ld));
+            }
+        }
+
+        return extracted;
     }
 
     private void changeColors() {
@@ -46,6 +75,17 @@ public class MainActivity extends AppCompatActivity {
                 null));
 
         mainTextView.setTextColor(isCalmBg ? Color.WHITE : Color.RED);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        changeColors();
+
+        MaterialCalendarView calendarView = findViewById(R.id.calendarView);
+        calendarView.removeDecorators();
+        calendarView.addDecorator(new CalendarHistoryDecorator(this, extractHistoryDays()));
     }
 
     public void settingsBtn_onClick(View view) {

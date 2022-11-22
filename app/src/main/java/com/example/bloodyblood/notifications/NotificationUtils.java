@@ -16,6 +16,7 @@ import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
+import com.example.bloodyblood.DateUtils;
 import com.example.bloodyblood.R;
 import com.example.bloodyblood.enums.NotificationIds;
 import com.example.bloodyblood.enums.RequestCodes;
@@ -54,7 +55,7 @@ public class NotificationUtils {
      * @param period - the period for calculating if the next day is in the current month/year
      * @return the day to send notification
      */
-    public static ZonedDateTime calculateNext(LocalDate currentDate, int startDay, int period) {
+    public static LocalDate calculateNext(LocalDate currentDate, int startDay, int period) {
         int year = currentDate.getYear();
         Month month = currentDate.getMonth();
         int day = startDay;
@@ -70,16 +71,16 @@ public class NotificationUtils {
             day = nextMonth ? nextStartDay : day;
         }
 
-        return LocalDate.of(year, month, day).atStartOfDay(ZoneId.systemDefault());
+        return LocalDate.of(year, month, day);
     }
 
-    public static void setMainNotification(Context context, boolean isStart, ZonedDateTime date) {
+    public static void setMainNotification(Context context, boolean isStart, LocalDate date) {
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Intent firstIntent = new Intent(context, MainNotificationDisplayReceiver.class);
         firstIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
 
         RequestCodes code = isStart ? RequestCodes.MAIN_NOTIFICATION : RequestCodes.END_NOTIFICATION;
-        long nextAlarmTime = date.toInstant().toEpochMilli();
+        long nextAlarmTime = DateUtils.millisFromDate(date);
 
         am.set(AlarmManager.RTC,
                 nextAlarmTime,
@@ -89,7 +90,7 @@ public class NotificationUtils {
         prefs.edit().putLong(code.name(), nextAlarmTime).apply();
     }
 
-    public static void setEndNotification(Context context, ZonedDateTime date) {
+    public static void setEndNotification(Context context, LocalDate date) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean endEnabled = prefs.getBoolean(StringConstants.END_NOTIFICATION_ENABLED, false);
         RequestCodes endCode = endEnabled ? RequestCodes.END_NOTIFICATION : RequestCodes.SILENT_END_ACTIONS;
@@ -102,7 +103,7 @@ public class NotificationUtils {
                 endIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long nextAlarmTime = date.toInstant().toEpochMilli();
+        long nextAlarmTime = DateUtils.millisFromDate(date);
 
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         am.set(AlarmManager.RTC, nextAlarmTime, endPendingIntent);
