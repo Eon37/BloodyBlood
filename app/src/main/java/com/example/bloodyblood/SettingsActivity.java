@@ -9,6 +9,9 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.example.bloodyblood.notifications.NotificationUtils;
 
+import java.util.HashSet;
+import java.util.TreeSet;
+
 public class SettingsActivity extends AppCompatActivity {
 
     @Override
@@ -39,8 +42,31 @@ public class SettingsActivity extends AppCompatActivity {
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
             switch (s) {
                 case StringConstants.START_DAY_KEY:
+                    //if start is set after the start but before the end then it may broke history showing
+                    boolean isCalmBg = sharedPreferences.getBoolean(StringConstants.IS_CALM_BG, false);
+                    if (!isCalmBg) {
+                        TreeSet<String> starts = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.STARTS_SET, new HashSet<>()));
+                        if (starts.size() > 0) {
+                            starts.remove(starts.last());
+                        }
+                        sharedPreferences.edit().putStringSet(StringConstants.STARTS_SET, starts).apply();
+                    }
+                    //no break 'cause should recalculate timings
                 case StringConstants.PERIOD_KEY:
                     NotificationUtils.recalculateTimings(this.getContext(), sharedPreferences);
+                    break;
+                case StringConstants.STARTS_SET:
+                    TreeSet<String> starts = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.STARTS_SET, new HashSet<>()));
+
+                    int amount = Integer.parseInt(sharedPreferences.getString(StringConstants.STORE_AMOUNT, "12"));
+                    if (starts.size() == amount + 1) {
+                        TreeSet<String> ends = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.ENDS_SET, new HashSet<>()));
+                        starts.remove(starts.first());
+                        ends.remove(ends.first());
+
+                        sharedPreferences.edit().putStringSet(StringConstants.STARTS_SET, starts).apply();
+                        sharedPreferences.edit().putStringSet(StringConstants.ENDS_SET, ends).apply();
+                    }
                     break;
             }
         }

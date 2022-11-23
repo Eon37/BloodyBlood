@@ -65,6 +65,21 @@
             app:summary="Specify the amount of days to send repeat notification if 'No' button pressed" />
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="History">
+        <EditTextPreference
+            android:defaultValue="12"
+            android:key="storeAmount"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Amount of periods"
+            android:dialogLayout="@layout/_number_text_edit_store_amount"
+            app:dialogMessage="Set the amount of periods to store"
+            app:dialogTitle="Amount of periods"
+            app:persistent="true"
+            app:summary="The amount of periods to show on the calendar" />
+    </PreferenceCategory>
+
+
     <PreferenceCategory app:title="Appearance (In developement)" />
 
 </PreferenceScreen>

@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,10 +43,10 @@ public class MainActivity extends AppCompatActivity {
         Set<String> starts = prefs.getStringSet(StringConstants.STARTS_SET, new HashSet<>());
         Set<String> ends = prefs.getStringSet(StringConstants.ENDS_SET, new HashSet<>());
 
-        Iterator<String> startsIterator = starts.iterator();
-        Iterator<String> endsIterator = ends.iterator();
+        Iterator<String> startsIterator = starts.stream().sorted().iterator();
+        Iterator<String> endsIterator = ends.stream().sorted().iterator();
         Collection<CalendarDay> extracted = new HashSet<>();
-        //todo consider config changes
+
         while (startsIterator.hasNext()) {
             LocalDate start = LocalDate.parse(startsIterator.next());
             LocalDate end = endsIterator.hasNext() ? LocalDate.parse(endsIterator.next()) : LocalDate.now();

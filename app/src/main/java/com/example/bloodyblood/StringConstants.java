@@ -12,4 +12,5 @@ public class StringConstants {
     public static final String INPUT_EXACT_DAYS = "inputExactDays";
     public static final String STARTS_SET = "starts";
     public static final String ENDS_SET = "ends";
+    public static final String STORE_AMOUNT = "storeAmount";
 }
