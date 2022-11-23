@@ -7,6 +7,8 @@ import androidx.preference.PreferenceManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -62,20 +64,28 @@ public class MainActivity extends AppCompatActivity {
     private void changeColors() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isCalmBg = prefs.getBoolean(StringConstants.IS_CALM_BG, true);
+        int selectedCalmColor = Color.parseColor(prefs.getString(StringConstants.CALM_COLORS, "#FFFFFF"));
+
+        Drawable calmBGGradient = new GradientDrawable(
+                GradientDrawable.Orientation.TL_BR,
+                new int[]{Color.BLACK, Color.BLACK, selectedCalmColor});
 
         LinearLayout mainActivityLayout = findViewById(R.id.activity_main_id);
-        mainActivityLayout.setBackground(ResourcesCompat.getDrawable(getResources(),
-                isCalmBg
-                        ? R.drawable.background_black_white_gradient
-                        : R.drawable.background_black_red_gradient,
-                null));
+        mainActivityLayout.setBackground(isCalmBg
+                ? calmBGGradient
+                : ResourcesCompat.getDrawable(getResources(), R.drawable.background_black_red_gradient, null));
+
+
+        Drawable calmTextBGGradient = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{Color.BLACK, Color.BLACK, selectedCalmColor});
 
         TextView mainTextView = findViewById(R.id.activity_main_text_view_id);
-        mainTextView.setBackground(ResourcesCompat.getDrawable(getResources(),
-                isCalmBg ? R.drawable.black_white_gradient : R.drawable.black_red_gradient,
-                null));
+        mainTextView.setBackground(isCalmBg
+                ? calmTextBGGradient
+                : ResourcesCompat.getDrawable(getResources(), R.drawable.black_red_gradient, null));
 
-        mainTextView.setTextColor(isCalmBg ? Color.WHITE : Color.RED);
+        mainTextView.setTextColor(isCalmBg ? selectedCalmColor : Color.RED);
     }
 
     @Override

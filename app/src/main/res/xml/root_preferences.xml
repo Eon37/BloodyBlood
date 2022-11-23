@@ -80,6 +80,70 @@
     </PreferenceCategory>
 
 
-    <PreferenceCategory app:title="Appearance (In developement)" />
+    <PreferenceCategory app:title="Appearance">
+        <ListPreference
+            android:defaultValue="#FFFFFF"
+            android:entries="@array/calm_colors"
+            android:entryValues="@array/calm_colors_values"
+            android:key="calmColors"
+            android:title="Calm color" />
+
+        <EditTextPreference
+            android:defaultValue="Well, well, well"
+            android:key="startNotificationTitle"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Start notification title"
+            app:dialogTitle="Set start notification title"
+            app:persistent="true"
+            app:summary="Set the title to be shown on start notification" />
+        <EditTextPreference
+            android:defaultValue="Are you bleeding already?"
+            android:key="startNotificationText"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Start notification text"
+            app:dialogTitle="Set start notification text"
+            app:persistent="true"
+            app:summary="Set the text to be shown on start notification" />
+
+        <EditTextPreference
+            android:defaultValue="Well, well, well"
+            android:key="endNotificationTitle"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="End notification title"
+            app:dialogTitle="Set end notification title"
+            app:persistent="true"
+            app:summary="Set the title to be shown on end notification" />
+        <EditTextPreference
+            android:defaultValue="Have you stopped bleeding?"
+            android:key="endNotificationText"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="End notification text"
+            app:dialogTitle="Set end notification text"
+            app:persistent="true"
+            app:summary="Set the text to be shown on end notification" />
+
+        <EditTextPreference
+            android:defaultValue="For how long?"
+            android:key="exactNotificationTitle"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Exact day notification title"
+            app:dialogTitle="Set exact day notification title"
+            app:persistent="true"
+            app:summary="Set the title to be shown on exact day notification" />
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="exactNotificationText"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Exact day notification text"
+            app:dialogTitle="Set exact day notification text"
+            app:persistent="true"
+            app:summary="Set the text to be shown on exact day notification" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

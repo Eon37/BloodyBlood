@@ -113,6 +113,7 @@ public class NotificationUtils {
     }
 
     public static Notification constructMainNotification(Context context, boolean isStart, boolean isCalmBg) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Intent afterStart = new Intent(context, AfterYesActionsReceiver.class);
         afterStart.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
         PendingIntent afterStartPendingIntent = PendingIntent.getBroadcast(
@@ -140,8 +141,12 @@ public class NotificationUtils {
                 .build();
 
         return new Notification.Builder(context, NotificationUtils.CHANNEL_ID)
-                .setContentTitle(isStart ? "Start titile" : "End titile")
-                .setContentText(isStart ? "Start sext" : "End sext")
+                .setContentTitle(isStart
+                        ? prefs.getString(StringConstants.START_TITLE, "Well, well, well")
+                        : prefs.getString(StringConstants.END_TITLE, "Well, well, well"))
+                .setContentText(isStart
+                        ? prefs.getString(StringConstants.START_TEXT, "Are you bleeding already?")
+                        : prefs.getString(StringConstants.END_TEXT, "Have you stopped bleeding?"))
                 .setAutoCancel(false)
                 .setSmallIcon(R.drawable.blood_icon)
                 .addAction(yesAction)
@@ -153,6 +158,7 @@ public class NotificationUtils {
     }
 
     public static Notification constructExactDayNotification(Context context, boolean isStart) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Intent remoteInputIntent = new Intent(context, ExactDaysInputReceiver.class);
         remoteInputIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
         PendingIntent remoteInputPendingIntent = PendingIntent.getBroadcast(
@@ -170,10 +176,8 @@ public class NotificationUtils {
                 .build();
 
         return new Notification.Builder(context, NotificationUtils.CHANNEL_ID)
-                .setContentTitle("Exact days")
-                .setContentText(isStart
-                        ? "How long have you been bleeding already?"
-                        : "How long have you stopped bleeding already?")
+                .setContentTitle(prefs.getString(StringConstants.EXACT_TITLE, "For how long?"))
+                .setContentText(prefs.getString(StringConstants.EXACT_TEXT, ""))
                 .setAutoCancel(false)
                 .setSmallIcon(R.drawable.blood_icon)
                 .addAction(inputAction)
