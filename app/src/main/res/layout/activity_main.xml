@@ -34,7 +34,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ddd"
-            app:mcv_selectionColor="#000"
+            app:mcv_headerTextAppearance="@style/CustomTextAppearance"
+            app:mcv_weekDayTextAppearance="@style/CustomTextAppearance"
+            app:mcv_dateTextAppearance="@style/CustomTextAppearance"
+            app:mcv_selectionColor="#000000"
             app:mcv_showOtherDates="all"
             app:mcv_selectionMode="none"
             app:mcv_tileSize="42dp"/>
