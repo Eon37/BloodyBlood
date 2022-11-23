@@ -1,4 +1,4 @@
-package com.example.bloodyblood.notifications;
+package com.eon37_dev.bloodyblood.notifications;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,12 +7,10 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
-import com.example.bloodyblood.DateUtils;
-import com.example.bloodyblood.StringConstants;
+import com.eon37_dev.bloodyblood.StringConstants;
+import com.eon37_dev.bloodyblood.DateUtils;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 public class SilentEndActionReceiver extends BroadcastReceiver {
 

@@ -1,4 +1,4 @@
-package com.example.bloodyblood.enums;
+package com.eon37_dev.bloodyblood.enums;
 
 public enum RequestCodes {
     MAIN_NOTIFICATION,

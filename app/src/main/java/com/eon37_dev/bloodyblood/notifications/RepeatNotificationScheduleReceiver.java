@@ -1,4 +1,4 @@
-package com.example.bloodyblood.notifications;
+package com.eon37_dev.bloodyblood.notifications;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,12 +7,10 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
-import com.example.bloodyblood.enums.NotificationIds;
-import com.example.bloodyblood.StringConstants;
+import com.eon37_dev.bloodyblood.StringConstants;
+import com.eon37_dev.bloodyblood.enums.NotificationIds;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 public class RepeatNotificationScheduleReceiver extends BroadcastReceiver {
     @Override

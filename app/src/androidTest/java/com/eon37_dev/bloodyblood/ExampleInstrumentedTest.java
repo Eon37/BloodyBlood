@@ -1,4 +1,4 @@
-package com.example.bloodyblood;
+package com.eon37_dev.bloodyblood;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.example.bloodyblood", appContext.getPackageName());
+        assertEquals("com.eon37_dev.bloodyblood", appContext.getPackageName());
     }
 }

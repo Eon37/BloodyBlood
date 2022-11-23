@@ -1,4 +1,4 @@
-package com.example.bloodyblood;
+package com.eon37_dev.bloodyblood;
 
 import android.content.Context;
 import android.graphics.Color;

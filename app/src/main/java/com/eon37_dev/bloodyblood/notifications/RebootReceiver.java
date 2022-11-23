@@ -1,4 +1,4 @@
-package com.example.bloodyblood.notifications;
+package com.eon37_dev.bloodyblood.notifications;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -8,8 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.example.bloodyblood.StringConstants;
-import com.example.bloodyblood.enums.RequestCodes;
+import com.eon37_dev.bloodyblood.StringConstants;
+import com.eon37_dev.bloodyblood.enums.RequestCodes;
 
 public class RebootReceiver extends BroadcastReceiver {
     @Override

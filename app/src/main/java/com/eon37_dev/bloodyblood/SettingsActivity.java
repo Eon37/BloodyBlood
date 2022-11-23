@@ -1,4 +1,4 @@
-package com.example.bloodyblood;
+package com.eon37_dev.bloodyblood;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.example.bloodyblood.notifications.NotificationUtils;
+import com.eon37_dev.bloodyblood.notifications.NotificationUtils;
 
 import java.util.HashSet;
 import java.util.TreeSet;

@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.eon37_dev.bloodyblood.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +20,7 @@
         </activity>
 
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.eon37_dev.bloodyblood.SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings">
             <meta-data
@@ -29,13 +29,13 @@
                 android:parentActivityName=".MainActivity"/>
         </activity>
 
-        <receiver android:name=".notifications.MainNotificationDisplayReceiver"/>
-        <receiver android:name=".notifications.RepeatNotificationScheduleReceiver"/>
-        <receiver android:name=".notifications.AfterYesActionsReceiver"/>
-        <receiver android:name=".notifications.SilentEndActionReceiver"/>
-        <receiver android:name=".notifications.ExactDaysInputReceiver"/>
+        <receiver android:name="com.eon37_dev.bloodyblood.notifications.MainNotificationDisplayReceiver"/>
+        <receiver android:name="com.eon37_dev.bloodyblood.notifications.RepeatNotificationScheduleReceiver"/>
+        <receiver android:name="com.eon37_dev.bloodyblood.notifications.AfterYesActionsReceiver"/>
+        <receiver android:name="com.eon37_dev.bloodyblood.notifications.SilentEndActionReceiver"/>
+        <receiver android:name="com.eon37_dev.bloodyblood.notifications.ExactDaysInputReceiver"/>
 
-        <receiver android:name=".notifications.RebootReceiver" android:enabled="true" android:exported="true">
+        <receiver android:name="com.eon37_dev.bloodyblood.notifications.RebootReceiver" android:enabled="true" android:exported="true">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

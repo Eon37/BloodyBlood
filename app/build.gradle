@@ -5,7 +5,7 @@ android {
     buildToolsVersion "33.0.0"
 
     defaultConfig {
-        applicationId "com.example.bloodyblood"
+        applicationId "com.eon37_dev.bloodyblood"
         minSdkVersion 26
         targetSdkVersion 32
         versionCode 1
@@ -20,7 +20,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    namespace 'com.example.bloodyblood'
+    namespace 'com.eon37_dev.bloodyblood'
 
 }
 

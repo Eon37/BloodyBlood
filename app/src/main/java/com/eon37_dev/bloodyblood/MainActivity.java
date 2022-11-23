@@ -1,4 +1,4 @@
-package com.example.bloodyblood;
+package com.eon37_dev.bloodyblood;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
@@ -23,7 +23,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class MainActivity extends AppCompatActivity {
 

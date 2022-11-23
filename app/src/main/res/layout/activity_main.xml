@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_black_white_gradient"
     android:orientation="vertical"
-    tools:context=".MainActivity"
+    tools:context="com.eon37_dev.bloodyblood.MainActivity"
     android:id="@+id/activity_main_id">
 
     <TextView

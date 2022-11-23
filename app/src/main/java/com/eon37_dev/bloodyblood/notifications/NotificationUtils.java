@@ -1,4 +1,4 @@
-package com.example.bloodyblood.notifications;
+package com.eon37_dev.bloodyblood.notifications;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -16,19 +16,17 @@ import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
-import com.example.bloodyblood.DateUtils;
-import com.example.bloodyblood.R;
-import com.example.bloodyblood.enums.NotificationIds;
-import com.example.bloodyblood.enums.RequestCodes;
-import com.example.bloodyblood.StringConstants;
+import com.eon37_dev.bloodyblood.R;
+import com.eon37_dev.bloodyblood.StringConstants;
+import com.eon37_dev.bloodyblood.enums.RequestCodes;
+import com.eon37_dev.bloodyblood.DateUtils;
+import com.eon37_dev.bloodyblood.enums.NotificationIds;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 public class NotificationUtils {
-    public static final String CHANNEL_ID = "com.example.bloodyblood.channelId";
+    public static final String CHANNEL_ID = "com.eon37_dev.bloodyblood.channelId";
     public static final String CHANNEL_NAME = "bloodyblood";
 
     private NotificationUtils() {}

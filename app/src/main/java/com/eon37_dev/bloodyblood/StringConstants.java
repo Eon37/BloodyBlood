@@ -1,4 +1,4 @@
-package com.example.bloodyblood;
+package com.eon37_dev.bloodyblood;
 
 public class StringConstants {
     public static final String START_DAY_KEY = "startDay";

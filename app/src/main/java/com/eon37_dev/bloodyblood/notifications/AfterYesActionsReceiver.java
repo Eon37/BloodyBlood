@@ -1,4 +1,4 @@
-package com.example.bloodyblood.notifications;
+package com.eon37_dev.bloodyblood.notifications;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -10,14 +10,11 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
-import com.example.bloodyblood.DateUtils;
-import com.example.bloodyblood.enums.NotificationIds;
-import com.example.bloodyblood.StringConstants;
+import com.eon37_dev.bloodyblood.DateUtils;
+import com.eon37_dev.bloodyblood.StringConstants;
+import com.eon37_dev.bloodyblood.enums.NotificationIds;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.HashSet;
-import java.util.Set;
 
 public class AfterYesActionsReceiver extends BroadcastReceiver {
 
