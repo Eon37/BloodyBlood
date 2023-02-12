@@ -12,7 +12,7 @@
             app:dialogTitle="Approximate start day"
             app:icon="@android:drawable/ic_menu_day"
             app:persistent="true"
-            app:summary="The approximate day of start in the current month\nUsed for calculating when to send the first notification in this month or further months" />
+            app:summary="The day of start in the current month or the approximate day if period is not started yet\nUsed for calculating when to send the very first notification" />
         <EditTextPreference
             android:key="period"
             android:selectAllOnFocus="true"
