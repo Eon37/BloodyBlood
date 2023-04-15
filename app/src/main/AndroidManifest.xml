@@ -33,7 +33,7 @@
         <receiver android:name="com.eon37_dev.bloodyblood.notifications.RepeatNotificationScheduleReceiver"/>
         <receiver android:name="com.eon37_dev.bloodyblood.notifications.AfterYesActionsReceiver"/>
         <receiver android:name="com.eon37_dev.bloodyblood.notifications.SilentEndActionReceiver"/>
-        <receiver android:name="com.eon37_dev.bloodyblood.notifications.ExactDaysInputReceiver"/>
+        <receiver android:name="com.eon37_dev.bloodyblood.notifications.ExactDayInputReceiver"/>
 
         <receiver android:name="com.eon37_dev.bloodyblood.notifications.RebootReceiver" android:enabled="true" android:exported="true">
             <intent-filter>

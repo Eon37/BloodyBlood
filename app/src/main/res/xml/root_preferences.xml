@@ -36,7 +36,7 @@
             app:dialogTitle="Duration"
             app:icon="@android:drawable/ic_menu_week"
             app:persistent="true"
-            app:summary="Used to change the background" />
+            app:summary="Used to change the background or send end notification" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Notifications">
@@ -51,7 +51,7 @@
             android:key="enableExactDay"
             android:title="Enable specifying exact day"
             app:persistent="true"
-            app:summary="If notification was late few days after the start or the end you can specify the exact number\nAffects both the start and the end notifications" />
+            app:summary="If notification was late few days after the start or the end you can specify the exact day of start or end\nAffects both the start and the end notifications" />
         <EditTextPreference
             android:defaultValue="5"
             android:key="repeatNotificationAfter"

@@ -167,9 +167,9 @@ public class NotificationUtils {
                 .setColorized(true);
 
         if (!isCancel) {
-            builder.setContentText(prefs.getString(StringConstants.EXACT_TEXT, ""));
+            builder.setContentText(prefs.getString(StringConstants.EXACT_TEXT, "Specify the day of month (Numbers from 0 to 31 only)"));
 
-            Intent remoteInputIntent = new Intent(context, ExactDaysInputReceiver.class);
+            Intent remoteInputIntent = new Intent(context, ExactDayInputReceiver.class);
             remoteInputIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
             PendingIntent remoteInputPendingIntent = PendingIntent.getBroadcast(
                     context,
@@ -178,16 +178,16 @@ public class NotificationUtils {
                     PendingIntent.FLAG_UPDATE_CURRENT);
             Notification.Action inputAction = new Notification.Action.Builder(
                     Icon.createWithResource(context, R.drawable.ic_launcher_foreground),
-                    "Set days (Numbers from 0 to 31 only)",
+                    "Set the day",
                     remoteInputPendingIntent)
                     .addRemoteInput(new RemoteInput.Builder(StringConstants.INPUT_EXACT_DAYS)
-                            .setLabel("Days since the " + (isStart ? "start" : "end"))
+                            .setLabel("The day of " + (isStart ? "start" : "end"))
                             .build())
                     .build();
 
             builder.addAction(inputAction);
         } else {
-            builder.setContentText("Exact days set to " + input);
+            builder.setContentText("Exact day's set to " + input);
         }
 
         return builder.build();

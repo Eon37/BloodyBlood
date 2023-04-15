@@ -17,7 +17,7 @@ import com.eon37_dev.bloodyblood.enums.NotificationIds;
 
 import java.time.LocalDate;
 
-public class ExactDaysInputReceiver extends BroadcastReceiver {
+public class ExactDayInputReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -27,11 +27,11 @@ public class ExactDaysInputReceiver extends BroadcastReceiver {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
-        int exactDays = 0;
+        int exactDay = 0;
         if (remoteInput != null) {
             try {
-                exactDays = Integer.parseInt(remoteInput.getString(StringConstants.INPUT_EXACT_DAYS));
-                if (exactDays < 0 || exactDays > 31) throw new NumberFormatException();
+                exactDay = Integer.parseInt(remoteInput.getString(StringConstants.INPUT_EXACT_DAYS));
+                if (exactDay < 0 || exactDay > 31) throw new NumberFormatException();
             } catch (NumberFormatException e) {
                 NotificationChannel channel = new NotificationChannel(NotificationUtils.CHANNEL_ID, NotificationUtils.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
                 notificationManager.createNotificationChannel(channel);
@@ -40,18 +40,19 @@ public class ExactDaysInputReceiver extends BroadcastReceiver {
             }
         }
 
-        notificationManager.notify(NotificationIds.EXACT_DAY_NOTIFICATION.ordinal(), NotificationUtils.constructExactDayNotification(context, isStart, true, exactDays));
+        notificationManager.notify(NotificationIds.EXACT_DAY_NOTIFICATION.ordinal(), NotificationUtils.constructExactDayNotification(context, isStart, true, exactDay));
 
-        DateUtils.saveHistory(prefs, LocalDate.now().minusDays(exactDays), isStart);
+        LocalDate exactDate = LocalDate.now().withDayOfMonth(exactDay);
+        DateUtils.saveHistory(prefs, exactDate, isStart);
 
         if (isStart) {
             NotificationUtils.setMainNotification(
                     context,
                     true,
-                    LocalDate.now().minusDays(exactDays).plusDays(period));
+                    exactDate.plusDays(period));
             NotificationUtils.setEndNotification(
                     context,
-                    LocalDate.now().minusDays(exactDays).plusDays(duration));
+                    exactDate.plusDays(duration));
         }
     }
 }
