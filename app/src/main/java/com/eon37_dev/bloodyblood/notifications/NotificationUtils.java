@@ -74,7 +74,7 @@ public class NotificationUtils {
 
     public static void setMainNotification(Context context, boolean isStart, LocalDate date) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int notificationTime = prefs.getInt(StringConstants.NOTIFICATION_TIME, 12);
+        int notificationTime = Integer.parseInt(prefs.getString(StringConstants.NOTIFICATION_TIME, "12"));
 
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Intent firstIntent = new Intent(context, MainNotificationDisplayReceiver.class);
@@ -93,7 +93,7 @@ public class NotificationUtils {
     public static void setEndNotification(Context context, LocalDate date) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean endEnabled = prefs.getBoolean(StringConstants.END_NOTIFICATION_ENABLED, false);
-        int notificationTime = prefs.getInt(StringConstants.NOTIFICATION_TIME, 12);
+        int notificationTime = Integer.parseInt(prefs.getString(StringConstants.NOTIFICATION_TIME, "12"));
         RequestCodes endCode = endEnabled ? RequestCodes.END_NOTIFICATION : RequestCodes.SILENT_END_ACTIONS;
 
         Intent endIntent = new Intent(context, endEnabled ? MainNotificationDisplayReceiver.class : SilentEndActionReceiver.class);

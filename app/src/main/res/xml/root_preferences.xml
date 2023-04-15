@@ -48,6 +48,7 @@
             android:title="Set the preferred time to receive notifications"
             android:dialogLayout="@layout/_number_text_edit"
             app:dialogTitle="Set the preferred time to receive notifications"
+            app:dialogMessage="Set hours (numbers from 0 to 23 only)"
             app:persistent="true" />
         <SwitchPreference
             android:defaultValue="false"
