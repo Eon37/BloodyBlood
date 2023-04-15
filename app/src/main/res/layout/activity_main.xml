@@ -51,6 +51,14 @@
         android:gravity="center">
 
         <Button
+            android:id="@+id/editBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/atomic_age"
+            android:onClick="editBtn_onClick"
+            android:text="Enable edit mode" />
+        <Button
             android:id="@+id/settingsBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

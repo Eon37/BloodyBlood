@@ -95,6 +95,7 @@ public class NotificationUtils {
 
         Intent endIntent = new Intent(context, endEnabled ? MainNotificationDisplayReceiver.class : SilentEndActionReceiver.class);
         endIntent.putExtra(StringConstants.IS_START_NOTIFICATION, false);
+        endIntent.putExtra(StringConstants.END_DATE, date.toEpochDay());
         PendingIntent endPendingIntent = PendingIntent.getBroadcast(
                 context,
                 endCode.ordinal(),
@@ -167,7 +168,7 @@ public class NotificationUtils {
                 .setColorized(true);
 
         if (!isCancel) {
-            builder.setContentText(prefs.getString(StringConstants.EXACT_TEXT, "Specify the day of month (Numbers from 0 to 31 only)"));
+            builder.setContentText(prefs.getString(StringConstants.EXACT_TEXT, "Specify the day of month (Numbers from 1 to 31 only)"));
 
             Intent remoteInputIntent = new Intent(context, ExactDayInputReceiver.class);
             remoteInputIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);

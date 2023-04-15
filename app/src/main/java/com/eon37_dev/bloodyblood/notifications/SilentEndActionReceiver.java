@@ -18,7 +18,8 @@ public class SilentEndActionReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         prefs.edit().putBoolean(StringConstants.IS_CALM_BG, true).apply();
+        LocalDate endDate = LocalDate.ofEpochDay(intent.getLongExtra(StringConstants.END_DATE, LocalDate.now().toEpochDay()));
 
-        DateUtils.saveHistory(prefs, LocalDate.now(), false);
+        DateUtils.saveHistory(prefs, endDate, false);
     }
 }

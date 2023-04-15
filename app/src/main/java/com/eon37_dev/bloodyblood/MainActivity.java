@@ -11,18 +11,12 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.eon37_dev.bloodyblood.calendar.OnDateSelectedListenerImpl;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-
-import org.threeten.bp.LocalDate;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,31 +27,13 @@ public class MainActivity extends AppCompatActivity {
 
         changeColors();
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        enableEditMode(prefs.getBoolean(StringConstants.IS_EDIT_MODE_ENABLED, false));
+
         MaterialCalendarView calendarView = findViewById(R.id.calendarView);
         calendarView.removeDecorators();
-        calendarView.addDecorator(new CalendarHistoryDecorator(this, extractHistoryDays()));
-    }
-
-    private Collection<CalendarDay> extractHistoryDays() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        Set<String> starts = prefs.getStringSet(StringConstants.STARTS_SET, new HashSet<>());
-        Set<String> ends = prefs.getStringSet(StringConstants.ENDS_SET, new HashSet<>());
-
-        Iterator<String> startsIterator = starts.stream().sorted().iterator();
-        Iterator<String> endsIterator = ends.stream().sorted().iterator();
-        Collection<CalendarDay> extracted = new HashSet<>();
-
-        while (startsIterator.hasNext()) {
-            LocalDate start = LocalDate.parse(startsIterator.next());
-            LocalDate end = endsIterator.hasNext() ? LocalDate.parse(endsIterator.next()) : LocalDate.now();
-
-            for (LocalDate ld = start; !ld.isAfter(end); ld = ld.plusDays(1)) {
-                extracted.add(CalendarDay.from(ld));
-            }
-        }
-
-        return extracted;
+        calendarView.addDecorator(new CalendarHistoryDecorator(this, DateUtils.extractHistoryDays(this)));
+        calendarView.setOnDateChangedListener(new OnDateSelectedListenerImpl(this));
     }
 
     private void changeColors() {
@@ -95,11 +71,30 @@ public class MainActivity extends AppCompatActivity {
 
         MaterialCalendarView calendarView = findViewById(R.id.calendarView);
         calendarView.removeDecorators();
-        calendarView.addDecorator(new CalendarHistoryDecorator(this, extractHistoryDays()));
+        calendarView.addDecorator(new CalendarHistoryDecorator(this, DateUtils.extractHistoryDays(this)));
     }
 
     public void settingsBtn_onClick(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    public void editBtn_onClick(View view) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean editModeEnabled = prefs.getBoolean(StringConstants.IS_EDIT_MODE_ENABLED, false);
+
+        prefs.edit().putBoolean(StringConstants.IS_EDIT_MODE_ENABLED, !editModeEnabled).commit();
+
+        enableEditMode(!editModeEnabled);
+    }
+
+    private void enableEditMode(boolean editModeEnabled) {
+        Button editBtn = findViewById(R.id.editBtn);
+        editBtn.setText(editModeEnabled ? "Disable edit mode" : "Enable edit mode");
+
+        MaterialCalendarView calendarView = findViewById(R.id.calendarView);
+        calendarView.setSelectionMode(editModeEnabled
+                ? MaterialCalendarView.SELECTION_MODE_SINGLE
+                : MaterialCalendarView.SELECTION_MODE_NONE);
     }
 }

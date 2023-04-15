@@ -25,16 +25,16 @@ public class ExactDayInputReceiver extends BroadcastReceiver {
         int period = Integer.parseInt(prefs.getString(StringConstants.PERIOD_KEY, "31"));
         int duration = Integer.parseInt(prefs.getString(StringConstants.DURATION_KEY, "5"));
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationChannel channel = new NotificationChannel(NotificationUtils.CHANNEL_ID, NotificationUtils.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+        notificationManager.createNotificationChannel(channel);
 
         Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
-        int exactDay = 0;
+        int exactDay = LocalDate.now().getDayOfMonth();
         if (remoteInput != null) {
             try {
                 exactDay = Integer.parseInt(remoteInput.getString(StringConstants.INPUT_EXACT_DAYS));
-                if (exactDay < 0 || exactDay > 31) throw new NumberFormatException();
+                if (exactDay < 1 || exactDay > 31) throw new NumberFormatException();
             } catch (NumberFormatException e) {
-                NotificationChannel channel = new NotificationChannel(NotificationUtils.CHANNEL_ID, NotificationUtils.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-                notificationManager.createNotificationChannel(channel);
                 notificationManager.notify(NotificationIds.EXACT_DAY_NOTIFICATION.ordinal(), NotificationUtils.constructExactDayNotification(context, isStart, false, 0));
                 return;
             }
