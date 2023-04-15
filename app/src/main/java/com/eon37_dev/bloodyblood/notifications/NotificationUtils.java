@@ -155,34 +155,42 @@ public class NotificationUtils {
                 .build();
     }
 
-    public static Notification constructExactDayNotification(Context context, boolean isStart) {
+    public static Notification constructExactDayNotification(Context context, boolean isStart, boolean isCancel, int input) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        Intent remoteInputIntent = new Intent(context, ExactDaysInputReceiver.class);
-        remoteInputIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
-        PendingIntent remoteInputPendingIntent = PendingIntent.getBroadcast(
-                context,
-                RequestCodes.SPECIFY_EXACT_DAY.ordinal(),
-                remoteInputIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification.Action inputAction = new Notification.Action.Builder(
-                Icon.createWithResource(context, R.drawable.ic_launcher_foreground),
-                "Set days (Numbers from 0 to 31 only)",
-                remoteInputPendingIntent)
-                .addRemoteInput(new RemoteInput.Builder(StringConstants.INPUT_EXACT_DAYS)
-                        .setLabel("Days since the " + (isStart ? "start" : "end"))
-                        .build())
-                .build();
 
-        return new Notification.Builder(context, NotificationUtils.CHANNEL_ID)
+        Notification.Builder builder =  new Notification.Builder(context, NotificationUtils.CHANNEL_ID)
                 .setContentTitle(prefs.getString(StringConstants.EXACT_TITLE, "For how long?"))
-                .setContentText(prefs.getString(StringConstants.EXACT_TEXT, ""))
-                .setAutoCancel(false)
+                .setAutoCancel(isCancel)
                 .setSmallIcon(R.drawable.blood_icon)
-                .addAction(inputAction)
-                .setOngoing(true)
+                .setOngoing(!isCancel)
                 .setColor(isStart ? Color.RED : Color.BLACK)
-                .setColorized(true)
-                .build();
+                .setColorized(true);
+
+        if (!isCancel) {
+            builder.setContentText(prefs.getString(StringConstants.EXACT_TEXT, ""));
+
+            Intent remoteInputIntent = new Intent(context, ExactDaysInputReceiver.class);
+            remoteInputIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
+            PendingIntent remoteInputPendingIntent = PendingIntent.getBroadcast(
+                    context,
+                    RequestCodes.SPECIFY_EXACT_DAY.ordinal(),
+                    remoteInputIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            Notification.Action inputAction = new Notification.Action.Builder(
+                    Icon.createWithResource(context, R.drawable.ic_launcher_foreground),
+                    "Set days (Numbers from 0 to 31 only)",
+                    remoteInputPendingIntent)
+                    .addRemoteInput(new RemoteInput.Builder(StringConstants.INPUT_EXACT_DAYS)
+                            .setLabel("Days since the " + (isStart ? "start" : "end"))
+                            .build())
+                    .build();
+
+            builder.addAction(inputAction);
+        } else {
+            builder.setContentText("Exact days set to " + input);
+        }
+
+        return builder.build();
     }
 
     public static void cancelNotification(Context context, NotificationIds id) {

@@ -31,7 +31,7 @@ public class AfterYesActionsReceiver extends BroadcastReceiver {
         prefs.edit().putBoolean(StringConstants.IS_CALM_BG, !isStart).apply();
 
         if (exactDayEnabled) {
-            Notification notification = NotificationUtils.constructExactDayNotification(context, isStart);
+            Notification notification = NotificationUtils.constructExactDayNotification(context, isStart, false, 0);
 
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationChannel channel = new NotificationChannel(NotificationUtils.CHANNEL_ID, NotificationUtils.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);

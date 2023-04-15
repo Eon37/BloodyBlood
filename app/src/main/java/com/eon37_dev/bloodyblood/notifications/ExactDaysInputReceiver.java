@@ -24,6 +24,7 @@ public class ExactDaysInputReceiver extends BroadcastReceiver {
         boolean isStart = intent.getBooleanExtra(StringConstants.IS_START_NOTIFICATION, true);
         int period = Integer.parseInt(prefs.getString(StringConstants.PERIOD_KEY, "31"));
         int duration = Integer.parseInt(prefs.getString(StringConstants.DURATION_KEY, "5"));
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
         int exactDays = 0;
@@ -32,15 +33,14 @@ public class ExactDaysInputReceiver extends BroadcastReceiver {
                 exactDays = Integer.parseInt(remoteInput.getString(StringConstants.INPUT_EXACT_DAYS));
                 if (exactDays < 0 || exactDays > 31) throw new NumberFormatException();
             } catch (NumberFormatException e) {
-                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 NotificationChannel channel = new NotificationChannel(NotificationUtils.CHANNEL_ID, NotificationUtils.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
                 notificationManager.createNotificationChannel(channel);
-                notificationManager.notify(NotificationIds.EXACT_DAY_NOTIFICATION.ordinal(), NotificationUtils.constructExactDayNotification(context, isStart));
+                notificationManager.notify(NotificationIds.EXACT_DAY_NOTIFICATION.ordinal(), NotificationUtils.constructExactDayNotification(context, isStart, false, 0));
                 return;
             }
         }
 
-        NotificationUtils.cancelNotification(context, NotificationIds.EXACT_DAY_NOTIFICATION);
+        notificationManager.notify(NotificationIds.EXACT_DAY_NOTIFICATION.ordinal(), NotificationUtils.constructExactDayNotification(context, isStart, true, exactDays));
 
         DateUtils.saveHistory(prefs, LocalDate.now().minusDays(exactDays), isStart);
 

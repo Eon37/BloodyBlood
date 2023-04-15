@@ -46,7 +46,8 @@ public class SettingsActivity extends AppCompatActivity {
                     boolean isCalmBg = sharedPreferences.getBoolean(StringConstants.IS_CALM_BG, false);
                     if (!isCalmBg) {
                         TreeSet<String> starts = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.STARTS_SET, new HashSet<>()));
-                        if (starts.size() > 0) {
+                        TreeSet<String> ends = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.ENDS_SET, new HashSet<>()));
+                        if (starts.size() > ends.size()) {
                             starts.remove(starts.last());
                         }
                         sharedPreferences.edit().putStringSet(StringConstants.STARTS_SET, starts).apply();
