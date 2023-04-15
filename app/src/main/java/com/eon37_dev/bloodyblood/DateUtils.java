@@ -7,6 +7,8 @@ import androidx.preference.PreferenceManager;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import org.threeten.bp.ZoneOffset;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collection;
@@ -17,8 +19,8 @@ import java.util.TreeSet;
 
 public class DateUtils {
 
-    public static long millisFromDate(LocalDate date) {
-        return date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    public static long millisFromDate(LocalDate date, int hour) {
+        return date.atTime(hour, 0).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
     public static void saveHistory(SharedPreferences prefs, LocalDate dateToSave, boolean isStart) {

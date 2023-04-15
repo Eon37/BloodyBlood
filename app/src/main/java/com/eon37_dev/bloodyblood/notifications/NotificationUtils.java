@@ -73,24 +73,27 @@ public class NotificationUtils {
     }
 
     public static void setMainNotification(Context context, boolean isStart, LocalDate date) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int notificationTime = prefs.getInt(StringConstants.NOTIFICATION_TIME, 12);
+
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Intent firstIntent = new Intent(context, MainNotificationDisplayReceiver.class);
         firstIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
 
         RequestCodes code = isStart ? RequestCodes.MAIN_NOTIFICATION : RequestCodes.END_NOTIFICATION;
-        long nextAlarmTime = DateUtils.millisFromDate(date);
+        long nextAlarmTime = DateUtils.millisFromDate(date, notificationTime);
 
         am.set(AlarmManager.RTC,
                 nextAlarmTime,
                 PendingIntent.getBroadcast(context, code.ordinal(), firstIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         prefs.edit().putLong(code.name(), nextAlarmTime).apply();
     }
 
     public static void setEndNotification(Context context, LocalDate date) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean endEnabled = prefs.getBoolean(StringConstants.END_NOTIFICATION_ENABLED, false);
+        int notificationTime = prefs.getInt(StringConstants.NOTIFICATION_TIME, 12);
         RequestCodes endCode = endEnabled ? RequestCodes.END_NOTIFICATION : RequestCodes.SILENT_END_ACTIONS;
 
         Intent endIntent = new Intent(context, endEnabled ? MainNotificationDisplayReceiver.class : SilentEndActionReceiver.class);
@@ -102,13 +105,12 @@ public class NotificationUtils {
                 endIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long nextAlarmTime = DateUtils.millisFromDate(date);
+        long nextAlarmTime = DateUtils.millisFromDate(date, notificationTime);
 
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         am.set(AlarmManager.RTC, nextAlarmTime, endPendingIntent);
 
         prefs.edit().putLong(endCode.name(), nextAlarmTime).apply();
-
     }
 
     public static Notification constructMainNotification(Context context, boolean isStart, boolean isCalmBg) {

@@ -40,6 +40,15 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Notifications">
+        <EditTextPreference
+            android:defaultValue="12"
+            android:key="notificationTime"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Set the preferred time to receive notifications"
+            android:dialogLayout="@layout/_number_text_edit"
+            app:dialogTitle="Set the preferred time to receive notifications"
+            app:persistent="true" />
         <SwitchPreference
             android:defaultValue="false"
             android:key="enableEnd"
