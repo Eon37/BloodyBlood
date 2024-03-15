@@ -8,8 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.preference.PreferenceManager;
+import android.preference.PreferenceManager;
 
 import com.eon37_dev.bloodyblood.StringConstants;
 import com.eon37_dev.bloodyblood.DateUtils;
@@ -35,14 +34,14 @@ public class ExactDayInputReceiver extends BroadcastReceiver {
                 exactDay = Integer.parseInt(remoteInput.getString(StringConstants.INPUT_EXACT_DAYS));
                 if (exactDay < 1 || exactDay > 31) throw new NumberFormatException();
             } catch (NumberFormatException e) {
-                notificationManager.notify(NotificationIds.EXACT_DAY_NOTIFICATION.ordinal(), NotificationUtils.constructExactDayNotification(context, isStart, false, 0));
+                notificationManager.notify(
+                        NotificationIds.EXACT_DAY_NOTIFICATION.ordinal(),
+                        NotificationUtils.constructExactDayNotification(context, isStart, false, 0));
                 return;
             }
         }
 
-        notificationManager.notify(NotificationIds.EXACT_DAY_NOTIFICATION.ordinal(), NotificationUtils.constructExactDayNotification(context, isStart, true, exactDay));
-
-        LocalDate exactDate = LocalDate.now().withDayOfMonth(exactDay);
+        LocalDate exactDate = LocalDate.now().withDayOfMonth(exactDay); //todo prev month calc
         DateUtils.saveHistory(prefs, exactDate, isStart);
 
         if (isStart) {
@@ -54,5 +53,9 @@ public class ExactDayInputReceiver extends BroadcastReceiver {
                     context,
                     exactDate.plusDays(duration));
         }
+
+        notificationManager.notify(
+                NotificationIds.EXACT_DAY_NOTIFICATION.ordinal(),
+                NotificationUtils.constructExactDayNotification(context, isStart, true, exactDay));
     }
 }

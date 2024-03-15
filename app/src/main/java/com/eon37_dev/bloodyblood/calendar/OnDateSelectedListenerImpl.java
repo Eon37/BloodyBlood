@@ -37,8 +37,8 @@ public class OnDateSelectedListenerImpl implements OnDateSelectedListener {
         if (!editModeEnabled) return;
         if (date.isAfter(CalendarDay.from(LocalDate.now()))) return;
 
-        Set<String> starts = new HashSet<>(prefs.getStringSet(StringConstants.STARTS_SET, new TreeSet<>()));
-        Set<String> ends = new HashSet<>(prefs.getStringSet(StringConstants.ENDS_SET, new TreeSet<>()));
+        Set<String> starts = new HashSet<>(prefs.getStringSet(StringConstants.STARTS_SET, new HashSet<>()));
+        Set<String> ends = new HashSet<>(prefs.getStringSet(StringConstants.ENDS_SET, new HashSet<>()));
 
         if (starts.contains(date.getDate().toString())) {
             //First day of the period tapped - remove
@@ -54,8 +54,8 @@ public class OnDateSelectedListenerImpl implements OnDateSelectedListener {
             starts.add(date.getDate().toString());
         } else if (ends.contains(date.getDate().minusDays(1).toString())) {
             //Next to last day of the period tapped - add
-            starts.remove(date.getDate().minusDays(1).toString());
-            starts.add(date.getDate().toString());
+            ends.remove(date.getDate().minusDays(1).toString());
+            ends.add(date.getDate().toString());
         } else {
             AlertDialog dialog = new AlertDialog.Builder(context)
                     .setIcon(R.drawable.ic_launcher_foreground)
@@ -68,11 +68,13 @@ public class OnDateSelectedListenerImpl implements OnDateSelectedListener {
             return;
         }
 
-        prefs.edit().putStringSet(StringConstants.STARTS_SET, new TreeSet<>(starts)).apply();
-        prefs.edit().putStringSet(StringConstants.ENDS_SET, new TreeSet<>(ends)).apply();
+        prefs.edit().putStringSet(StringConstants.STARTS_SET, starts).apply();
+        prefs.edit().putStringSet(StringConstants.ENDS_SET, ends).apply();
 
         widget.removeDecorators();
-        widget.addDecorator(new CalendarHistoryDecorator(context, DateUtils.extractHistoryDays(starts, ends)));
+        widget.addDecorator(new CalendarHistoryDecorator(context, DateUtils.extractHistoryDays(
+                new TreeSet<>(starts),
+                new TreeSet<>(ends))));
         widget.clearSelection();
     }
 }

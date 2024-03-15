@@ -45,8 +45,8 @@ public class SettingsActivity extends AppCompatActivity {
                     //if start is set after the start but before the end then it may broke history showing
                     boolean isCalmBg = sharedPreferences.getBoolean(StringConstants.IS_CALM_BG, false);
                     if (!isCalmBg) {
-                        TreeSet<String> starts = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.STARTS_SET, new HashSet<>()));
-                        TreeSet<String> ends = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.ENDS_SET, new HashSet<>()));
+                        TreeSet<String> starts = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.STARTS_SET, new TreeSet<>()));
+                        TreeSet<String> ends = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.ENDS_SET, new TreeSet<>()));
                         if (starts.size() > ends.size()) {
                             starts.remove(starts.last());
                         }
@@ -57,11 +57,11 @@ public class SettingsActivity extends AppCompatActivity {
                     NotificationUtils.recalculateTimings(this.getContext(), sharedPreferences);
                     break;
                 case StringConstants.STARTS_SET:
-                    TreeSet<String> starts = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.STARTS_SET, new HashSet<>()));
+                    TreeSet<String> starts = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.STARTS_SET, new TreeSet<>()));
 
                     int amount = Integer.parseInt(sharedPreferences.getString(StringConstants.STORE_AMOUNT, "12"));
                     if (starts.size() == amount + 1) {
-                        TreeSet<String> ends = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.ENDS_SET, new HashSet<>()));
+                        TreeSet<String> ends = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.ENDS_SET, new TreeSet<>()));
                         starts.remove(starts.first());
                         ends.remove(ends.first());
 
