@@ -19,8 +19,8 @@ import java.util.TreeSet;
 
 public class DateUtils {
 
-    public static long millisFromDate(LocalDate date, int hour) {
-        return date.atTime(hour, 0).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    public static long millisFromDate(LocalDate date, int hour, int minute) {
+        return date.atTime(hour, minute).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
     public static void saveHistory(SharedPreferences prefs, LocalDate dateToSave, boolean isStart) {

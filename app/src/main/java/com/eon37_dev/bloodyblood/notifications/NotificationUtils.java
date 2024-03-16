@@ -3,6 +3,7 @@ package com.eon37_dev.bloodyblood.notifications;
 import static android.content.Context.ALARM_SERVICE;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -37,8 +38,19 @@ public class NotificationUtils {
             return;
         }
 
-        int startDay = Integer.parseInt(sharedPreferences.getString(StringConstants.START_DAY_KEY, "1"));
+        int startDay = Integer.parseInt(sharedPreferences.getString(StringConstants.START_DAY_KEY, "-1"));
         int period = Integer.parseInt(sharedPreferences.getString(StringConstants.PERIOD_KEY, "31"));
+
+        if (startDay < 1) {
+            AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setIcon(R.drawable.ic_launcher_foreground)
+                    .setTitle("Set the period start day")
+                    .setMessage("The start day is not set at the moment\n" +
+                            "To start using the app specify the approximate start day in settings")
+                    .create();
+            dialog.show();
+            return;
+        }
 
         setMainNotification(context, true, calculateNext(LocalDate.now(), startDay, period));
     }
@@ -74,14 +86,16 @@ public class NotificationUtils {
 
     public static void setMainNotification(Context context, boolean isStart, LocalDate date) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int notificationTime = Integer.parseInt(prefs.getString(StringConstants.NOTIFICATION_TIME, "12"));
+        int notificationTime = prefs.getInt(StringConstants.NOTIFICATION_TIME, 720);
+        int hour = notificationTime / 60;
+        int minute = notificationTime % 60;
 
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Intent firstIntent = new Intent(context, MainNotificationDisplayReceiver.class);
         firstIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
 
         RequestCodes code = isStart ? RequestCodes.MAIN_NOTIFICATION : RequestCodes.END_NOTIFICATION;
-        long nextAlarmTime = DateUtils.millisFromDate(date, notificationTime);
+        long nextAlarmTime = DateUtils.millisFromDate(date, hour, minute);
 
         am.set(AlarmManager.RTC,
                 nextAlarmTime,
@@ -92,10 +106,12 @@ public class NotificationUtils {
 
     public static void setEndNotification(Context context, LocalDate date) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean endEnabled = prefs.getBoolean(StringConstants.END_NOTIFICATION_ENABLED, false);
-        int notificationTime = Integer.parseInt(prefs.getString(StringConstants.NOTIFICATION_TIME, "12"));
-        RequestCodes endCode = endEnabled ? RequestCodes.END_NOTIFICATION : RequestCodes.SILENT_END_ACTIONS;
+        int notificationTime = prefs.getInt(StringConstants.NOTIFICATION_TIME, 720);
+        int hour = notificationTime / 60;
+        int minute = notificationTime % 60;
 
+        boolean endEnabled = prefs.getBoolean(StringConstants.END_NOTIFICATION_ENABLED, false);
+        RequestCodes endCode = endEnabled ? RequestCodes.END_NOTIFICATION : RequestCodes.SILENT_END_ACTIONS;
         Intent endIntent = new Intent(context, endEnabled ? MainNotificationDisplayReceiver.class : SilentEndActionReceiver.class);
         endIntent.putExtra(StringConstants.IS_START_NOTIFICATION, false);
         endIntent.putExtra(StringConstants.END_DATE, date.toEpochDay());
@@ -105,7 +121,7 @@ public class NotificationUtils {
                 endIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long nextAlarmTime = DateUtils.millisFromDate(date, notificationTime);
+        long nextAlarmTime = DateUtils.millisFromDate(date, hour, minute);
 
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         am.set(AlarmManager.RTC, nextAlarmTime, endPendingIntent);

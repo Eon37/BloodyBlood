@@ -1,15 +1,19 @@
 package com.eon37_dev.bloodyblood;
 
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.eon37_dev.bloodyblood.notifications.NotificationUtils;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.TreeSet;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -39,9 +43,37 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         @Override
+        public void onDisplayPreferenceDialog(Preference preference) {
+            DialogFragment dialogFragment = null;
+            if (preference instanceof TimePreference) {
+                dialogFragment = TimePreferenceDialogFragmentCompat.newInstance();
+            }
+
+            if (dialogFragment != null) {
+                dialogFragment.setTargetFragment(this, 0);
+                dialogFragment.show(this.getFragmentManager(), "androidx.preference.PreferenceFragment.DIALOG");
+            }
+            else {
+                super.onDisplayPreferenceDialog(preference);
+            }
+        }
+
+        @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
             switch (s) {
                 case StringConstants.START_DAY_KEY:
+                    int startDay = Integer.parseInt(sharedPreferences.getString(StringConstants.START_DAY_KEY, "1"));
+                    if (startDay < 1 || startDay > 31) {
+                        AlertDialog dialog = new AlertDialog.Builder(this.getContext())
+                                .setIcon(R.drawable.ic_launcher_foreground)
+                                .setTitle("Incorrect start day")
+                                .setMessage("Set the day of month\nNumbers 1-31 only")
+                                .create();
+                        dialog.show();
+
+                        sharedPreferences.edit().remove(StringConstants.START_DAY_KEY).commit();
+                        return;
+                    }
                     //if start is set after the start but before the end then it may broke history showing
                     boolean isCalmBg = sharedPreferences.getBoolean(StringConstants.IS_CALM_BG, false);
                     if (!isCalmBg) {

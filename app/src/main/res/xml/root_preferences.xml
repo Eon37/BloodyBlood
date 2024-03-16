@@ -3,11 +3,11 @@
 
     <PreferenceCategory app:title="Period">
         <EditTextPreference
+            android:dialogLayout="@layout/_number_text_edit"
             android:key="startDay"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="Approximate start day"
-            android:dialogLayout="@layout/_number_text_edit"
             app:dialogMessage="Set the day"
             app:dialogTitle="Approximate start day"
             app:icon="@android:drawable/ic_menu_day"
@@ -15,11 +15,11 @@
             app:summary="The day of start in the current month or the approximate day if period is not started yet
                         \nUsed for calculating when to send the very first notification" />
         <EditTextPreference
+            android:dialogLayout="@layout/_number_text_edit"
             android:key="period"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="Period"
-            android:dialogLayout="@layout/_number_text_edit"
             app:defaultValue="31"
             app:dialogMessage="Set the period"
             app:dialogTitle="Period"
@@ -28,11 +28,11 @@
             app:summary="Usual amount of days between the starts" />
         <EditTextPreference
             android:defaultValue="5"
+            android:dialogLayout="@layout/_number_text_edit"
             android:key="duration"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="Duration"
-            android:dialogLayout="@layout/_number_text_edit"
             app:dialogMessage="Set the duration"
             app:dialogTitle="Duration"
             app:icon="@android:drawable/ic_menu_week"
@@ -41,23 +41,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Notifications">
-        <EditTextPreference
-            android:defaultValue="12"
+        <com.eon37_dev.bloodyblood.TimePreference
             android:key="notificationTime"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="Set the preferred time to receive notifications"
-            android:dialogLayout="@layout/_number_text_edit"
-            app:dialogTitle="Set the preferred time to receive notifications"
-            app:dialogMessage="Set hours (numbers from 0 to 23 only)"
-            app:persistent="true" />
+            android:defaultValue="720"
+            android:title="Set time"
+            android:summary="Set the preferred time to receive notifications"/>
         <EditTextPreference
             android:defaultValue="3"
+            android:dialogLayout="@layout/_number_text_edit"
             android:key="repeatNotificationAfter"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="Repeat notification after"
-            android:dialogLayout="@layout/_number_text_edit"
             app:dialogMessage="Set the amount of days"
             app:dialogTitle="Repeat notification after"
             app:persistent="true"
@@ -82,11 +77,11 @@
     <PreferenceCategory app:title="History">
         <EditTextPreference
             android:defaultValue="12"
+            android:dialogLayout="@layout/_number_text_edit_store_amount"
             android:key="storeAmount"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="Amount of periods"
-            android:dialogLayout="@layout/_number_text_edit_store_amount"
             app:dialogMessage="Set the amount of periods to store"
             app:dialogTitle="Amount of periods"
             app:persistent="true"
