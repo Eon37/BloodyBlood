@@ -35,7 +35,7 @@ public class OnDateSelectedListenerImpl implements OnDateSelectedListener {
 
         if (!selected) return;
         if (!editModeEnabled) return;
-        if (date.isAfter(CalendarDay.from(LocalDate.now()))) return;
+        if (date.isAfter(CalendarDay.from(LocalDate.now().minusDays(1)))) return;
 
         Set<String> starts = new HashSet<>(prefs.getStringSet(StringConstants.STARTS_SET, new HashSet<>()));
         Set<String> ends = new HashSet<>(prefs.getStringSet(StringConstants.ENDS_SET, new HashSet<>()));
