@@ -162,7 +162,7 @@ public class NotificationUtils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         Notification.Builder builder =  new Notification.Builder(context, NotificationUtils.CHANNEL_ID)
-                .setContentTitle(prefs.getString(StringConstants.EXACT_TITLE, "For how long?"))
+                .setContentTitle(prefs.getString(StringConstants.EXACT_TITLE, "At which day exactly?"))
                 .setAutoCancel(isCancel)
                 .setSmallIcon(R.drawable.blood_icon)
                 .setOngoing(!isCancel)
@@ -170,7 +170,7 @@ public class NotificationUtils {
                 .setColorized(true);
 
         if (!isCancel) {
-            builder.setContentText(prefs.getString(StringConstants.EXACT_TEXT, "Specify the day of month (Numbers from 1 to 31 only)"));
+            builder.setContentText(prefs.getString(StringConstants.EXACT_TEXT, "Set the day of month"));
 
             Intent remoteInputIntent = new Intent(context, ExactDayInputReceiver.class);
             remoteInputIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
@@ -181,7 +181,7 @@ public class NotificationUtils {
                     PendingIntent.FLAG_UPDATE_CURRENT);
             Notification.Action inputAction = new Notification.Action.Builder(
                     Icon.createWithResource(context, R.drawable.ic_launcher_foreground),
-                    "Set the day",
+                    "Set the day of month",
                     remoteInputPendingIntent)
                     .addRemoteInput(new RemoteInput.Builder(StringConstants.INPUT_EXACT_DAYS)
                             .setLabel("The day of " + (isStart ? "start" : "end"))

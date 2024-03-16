@@ -12,7 +12,8 @@
             app:dialogTitle="Approximate start day"
             app:icon="@android:drawable/ic_menu_day"
             app:persistent="true"
-            app:summary="The day of start in the current month or the approximate day if period is not started yet\nUsed for calculating when to send the very first notification" />
+            app:summary="The day of start in the current month or the approximate day if period is not started yet
+                        \nUsed for calculating when to send the very first notification" />
         <EditTextPreference
             android:key="period"
             android:selectAllOnFocus="true"
@@ -50,20 +51,8 @@
             app:dialogTitle="Set the preferred time to receive notifications"
             app:dialogMessage="Set hours (numbers from 0 to 23 only)"
             app:persistent="true" />
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="enableEnd"
-            android:title="Enable end notification"
-            app:persistent="true"
-            app:summary="Used to change the background\nCalculated using duration" />
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="enableExactDay"
-            android:title="Enable specifying exact day"
-            app:persistent="true"
-            app:summary="If notification was late few days after the start or the end you can specify the exact day of start or end\nAffects both the start and the end notifications" />
         <EditTextPreference
-            android:defaultValue="5"
+            android:defaultValue="3"
             android:key="repeatNotificationAfter"
             android:selectAllOnFocus="true"
             android:singleLine="true"
@@ -72,7 +61,22 @@
             app:dialogMessage="Set the amount of days"
             app:dialogTitle="Repeat notification after"
             app:persistent="true"
-            app:summary="Specify the amount of days to send repeat notification if 'No' button pressed" />
+            app:summary="Specify the amount of days to repeat notification if 'No' button pressed
+                        \nAffects both the start and the end notifications" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="enableEnd"
+            android:title="Enable end notification"
+            app:persistent="true"
+            app:summary="Get notified at the end of a period
+                        \nUsed to change the background
+                        \nCalculated using duration" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="enableExactDay"
+            android:title="Enable specifying exact day"
+            app:persistent="true"
+            app:summary="If notification was late few days after the start or the end you can specify the exact day of start or end" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="History">
@@ -137,7 +141,7 @@
             app:summary="Set the text to be shown on end notification" />
 
         <EditTextPreference
-            android:defaultValue="For how long?"
+            android:defaultValue="At which day exactly?"
             android:key="exactNotificationTitle"
             android:selectAllOnFocus="true"
             android:singleLine="true"
