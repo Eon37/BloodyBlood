@@ -53,6 +53,7 @@ public class SettingsActivity extends AppCompatActivity {
                         sharedPreferences.edit().putStringSet(StringConstants.STARTS_SET, starts).apply();
                     }
                     //no break 'cause should recalculate timings
+                case StringConstants.NOTIFICATION_TIME:
                 case StringConstants.PERIOD_KEY:
                     NotificationUtils.recalculateTimings(this.getContext(), sharedPreferences);
                     break;
