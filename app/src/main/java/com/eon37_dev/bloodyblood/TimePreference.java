@@ -40,7 +40,9 @@ public class TimePreference extends DialogPreference {
     }
     @Override
     protected void onSetInitialValue(Object defaultValue) {
-        setTime(getPersistedInt(time));
+        int persistedInt = getPersistedInt(-1);
+
+        setTime(persistedInt > -1 ? persistedInt : (Integer) defaultValue);
     }
     @Override
     public int getDialogLayoutResource() {
