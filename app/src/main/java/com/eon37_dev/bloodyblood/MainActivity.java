@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -29,6 +30,18 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         enableEditMode(prefs.getBoolean(StringConstants.IS_EDIT_MODE_ENABLED, false));
+
+        boolean startDaySet = Integer.parseInt(prefs.getString(StringConstants.START_DAY_KEY, "-1")) > -1;
+        if (!startDaySet) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.ic_launcher_foreground)
+                    .setTitle("Set the period start day")
+                    .setMessage("The start day is not set at the moment\n" +
+                            "To start using the app specify the approximate start day in settings")
+                    .create();
+            dialog.show();
+            return;
+        }
 
         MaterialCalendarView calendarView = findViewById(R.id.calendarView);
         calendarView.removeDecorators();
