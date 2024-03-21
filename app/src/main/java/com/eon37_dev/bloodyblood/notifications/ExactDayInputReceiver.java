@@ -31,11 +31,12 @@ public class ExactDayInputReceiver extends BroadcastReceiver {
         int exactDay = LocalDate.now().getDayOfMonth();
         if (remoteInput != null) {
             exactDay = Integer.parseInt(remoteInput.getString(StringConstants.INPUT_EXACT_DAYS));
-            if (exactDay < 1 || exactDay > 31)
+            if (exactDay < 1 || exactDay > 31) {
                 notificationManager.notify(
                         NotificationIds.EXACT_DAY_NOTIFICATION.ordinal(),
                         NotificationUtils.constructExactDayNotification(context, isStart, false, 0));
-            return;
+                return;
+            }
         }
 
         int currentDay = LocalDate.now().getDayOfMonth();
