@@ -41,7 +41,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Notifications">
-        <com.eon37_dev.bloodyblood.TimePreference
+        <com.eon37_dev.bloodyblood.settings.TimePreference
             android:key="notificationTime"
             android:defaultValue="720"
             android:title="Set time"
@@ -81,11 +81,11 @@
             android:key="storeAmount"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="Amount of periods"
-            app:dialogMessage="Set the amount of periods to store"
-            app:dialogTitle="Amount of periods"
+            android:title="Store history for"
+            app:dialogMessage="Set the amount of months to store history"
+            app:dialogTitle="Amount of months"
             app:persistent="true"
-            app:summary="The amount of periods to show on the calendar" />
+            app:summary="The amount of months to store history to show on the calendar" />
     </PreferenceCategory>
 
 

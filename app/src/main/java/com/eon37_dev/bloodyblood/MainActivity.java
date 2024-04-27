@@ -16,7 +16,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.eon37_dev.bloodyblood.calendar.CalendarHistoryDecorator;
+import com.eon37_dev.bloodyblood.calendar.DateUtils;
 import com.eon37_dev.bloodyblood.calendar.OnDateSelectedListenerImpl;
+import com.eon37_dev.bloodyblood.settings.SettingsActivity;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 public class MainActivity extends AppCompatActivity {

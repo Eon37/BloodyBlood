@@ -1,10 +1,12 @@
-package com.eon37_dev.bloodyblood;
+package com.eon37_dev.bloodyblood.settings;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 
 import androidx.preference.DialogPreference;
+
+import com.eon37_dev.bloodyblood.R;
 
 public class TimePreference extends DialogPreference {
     private int time;

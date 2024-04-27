@@ -1,10 +1,11 @@
-package com.eon37_dev.bloodyblood;
+package com.eon37_dev.bloodyblood.calendar;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
+import com.eon37_dev.bloodyblood.StringConstants;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.time.LocalDate;

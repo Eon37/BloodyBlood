@@ -1,4 +1,4 @@
-package com.eon37_dev.bloodyblood;
+package com.eon37_dev.bloodyblood.settings;
 
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -7,6 +7,9 @@ import android.widget.TimePicker;
 
 import androidx.preference.DialogPreference;
 import androidx.preference.PreferenceDialogFragmentCompat;
+
+import com.eon37_dev.bloodyblood.R;
+import com.eon37_dev.bloodyblood.StringConstants;
 
 public class TimePreferenceDialogFragmentCompat extends PreferenceDialogFragmentCompat {
     private TimePicker timePicker;

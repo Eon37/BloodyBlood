@@ -1,4 +1,4 @@
-package com.eon37_dev.bloodyblood;
+package com.eon37_dev.bloodyblood.settings;
 
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
@@ -10,6 +10,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.eon37_dev.bloodyblood.R;
+import com.eon37_dev.bloodyblood.StringConstants;
 import com.eon37_dev.bloodyblood.notifications.NotificationUtils;
 
 import java.time.LocalDate;

@@ -7,8 +7,6 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
-import com.eon37_dev.bloodyblood.CalendarHistoryDecorator;
-import com.eon37_dev.bloodyblood.DateUtils;
 import com.eon37_dev.bloodyblood.R;
 import com.eon37_dev.bloodyblood.StringConstants;
 import com.prolificinteractive.materialcalendarview.CalendarDay;

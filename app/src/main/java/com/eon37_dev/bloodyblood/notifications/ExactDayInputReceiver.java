@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.eon37_dev.bloodyblood.StringConstants;
-import com.eon37_dev.bloodyblood.DateUtils;
+import com.eon37_dev.bloodyblood.calendar.DateUtils;
 import com.eon37_dev.bloodyblood.enums.NotificationIds;
 
 import java.time.LocalDate;
