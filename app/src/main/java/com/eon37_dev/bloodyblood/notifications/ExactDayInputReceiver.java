@@ -40,12 +40,12 @@ public class ExactDayInputReceiver extends BroadcastReceiver {
         }
 
         int currentDay = LocalDate.now().getDayOfMonth();
-        LocalDate exactDate = currentDay >= exactDay
-                ? LocalDate.now()
-                .withDayOfMonth(exactDay)
-                : LocalDate.now()
-                .withMonth(LocalDate.now().getMonthValue() - 1)
-                .withDayOfMonth(exactDay);
+        LocalDate exactDate = exactDay <= currentDay
+                              ? LocalDate.now()
+                                      .withDayOfMonth(exactDay)
+                              : LocalDate.now()
+                                      .withMonth(LocalDate.now().getMonthValue() - 1)
+                                      .withDayOfMonth(exactDay);
 
         DateUtils.saveHistory(prefs, exactDate, isStart);
 
