@@ -12,8 +12,7 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.eon37_dev.bloodyblood.notifications.NotificationUtils;
 
-import java.util.HashSet;
-import java.util.Optional;
+import java.time.LocalDate;
 import java.util.TreeSet;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -74,33 +73,17 @@ public class SettingsActivity extends AppCompatActivity {
                         sharedPreferences.edit().remove(StringConstants.START_DAY_KEY).commit();
                         return;
                     }
-                    //if start is set after the start but before the end then it may broke history showing
-                    boolean isCalmBg = sharedPreferences.getBoolean(StringConstants.IS_CALM_BG, false);
-                    if (!isCalmBg) {
-                        TreeSet<String> starts = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.STARTS_SET, new TreeSet<>()));
-                        TreeSet<String> ends = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.ENDS_SET, new TreeSet<>()));
-                        if (starts.size() > ends.size()) {
-                            starts.remove(starts.last());
-                        }
-                        sharedPreferences.edit().putStringSet(StringConstants.STARTS_SET, starts).apply();
-                    }
                     //no break 'cause should recalculate timings
                 case StringConstants.NOTIFICATION_TIME:
                 case StringConstants.PERIOD_KEY:
                     NotificationUtils.recalculateTimings(this.getContext(), sharedPreferences);
                     break;
-                case StringConstants.STARTS_SET:
-                    TreeSet<String> starts = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.STARTS_SET, new TreeSet<>()));
+                case StringConstants.HISTORY_SET:
+                    TreeSet<String> history = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.HISTORY_SET, new TreeSet<>()));
 
                     int amount = Integer.parseInt(sharedPreferences.getString(StringConstants.STORE_AMOUNT, "12"));
-                    if (starts.size() == amount + 1) {
-                        TreeSet<String> ends = new TreeSet<>(sharedPreferences.getStringSet(StringConstants.ENDS_SET, new TreeSet<>()));
-                        starts.remove(starts.first());
-                        ends.remove(ends.first());
+                    history.removeIf(day -> LocalDate.parse(day).isBefore(LocalDate.now().minusMonths(amount)));
 
-                        sharedPreferences.edit().putStringSet(StringConstants.STARTS_SET, starts).apply();
-                        sharedPreferences.edit().putStringSet(StringConstants.ENDS_SET, ends).apply();
-                    }
                     break;
             }
         }

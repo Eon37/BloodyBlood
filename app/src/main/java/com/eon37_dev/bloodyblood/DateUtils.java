@@ -7,15 +7,13 @@ import androidx.preference.PreferenceManager;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import org.threeten.bp.ZoneOffset;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class DateUtils {
 
@@ -24,37 +22,45 @@ public class DateUtils {
     }
 
     public static void saveHistory(SharedPreferences prefs, LocalDate dateToSave, boolean isStart) {
-        String setKey = isStart ? StringConstants.STARTS_SET : StringConstants.ENDS_SET;
+        TreeSet<String> set = new TreeSet<>(prefs.getStringSet(StringConstants.HISTORY_SET, new TreeSet<>()));
 
-        Set<String> set = new TreeSet<>(prefs.getStringSet(setKey, new TreeSet<>()));
-        set.add(dateToSave.toString());
+        if (isStart) {
+            set.add(dateToSave.toString());
+        } else {
+            for (LocalDate i = LocalDate.parse(set.last()); !i.isAfter(dateToSave); i = i.plusDays(1)) {
+                set.add(i.toString());
+            }
+        }
 
-        prefs.edit().putStringSet(setKey, set).apply();
+        prefs.edit().putStringSet(StringConstants.HISTORY_SET, set).apply();
     }
 
     public static Collection<CalendarDay> extractHistoryDays(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        TreeSet<String> set = new TreeSet<>(prefs.getStringSet(StringConstants.HISTORY_SET, new TreeSet<>()));
 
-        TreeSet<String> starts = new TreeSet<>(prefs.getStringSet(StringConstants.STARTS_SET, new TreeSet<>()));
-        TreeSet<String> ends = new TreeSet<>(prefs.getStringSet(StringConstants.ENDS_SET, new TreeSet<>()));
-
-        return extractHistoryDays(starts, ends);
+        return extractHistoryDays(prefs, set);
     }
 
-    public static Collection<CalendarDay> extractHistoryDays(TreeSet<String> startsTree, TreeSet<String> endsTree) {
-        Iterator<String> startsIterator = startsTree.iterator();
-        Iterator<String> endsIterator = endsTree.iterator();
+    public static Collection<CalendarDay> extractHistoryDays(SharedPreferences prefs, TreeSet<String> history) {
+        if (history.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         Collection<CalendarDay> extracted = new HashSet<>();
+        history.stream()
+                .map(org.threeten.bp.LocalDate::parse)
+                .map(CalendarDay::from)
+                .collect(Collectors.toCollection(() -> extracted));
 
-        while (startsIterator.hasNext()) {
-            org.threeten.bp.LocalDate start = org.threeten.bp.LocalDate.parse(startsIterator.next());
-            org.threeten.bp.LocalDate end = endsIterator.hasNext()
-                    ? org.threeten.bp.LocalDate.parse(endsIterator.next())
-                    : org.threeten.bp.LocalDate.now();
-
-            for (org.threeten.bp.LocalDate ld = start; !ld.isAfter(end); ld = ld.plusDays(1)) {
-                extracted.add(CalendarDay.from(ld));
+        boolean isCalmBg = prefs.getBoolean(StringConstants.IS_CALM_BG, true);
+        if (!isCalmBg) {
+            for (LocalDate i = LocalDate.parse(history.last()); !i.isAfter(LocalDate.now()); i = i.plusDays(1)) {
+                history.add(i.toString());
+                extracted.add(CalendarDay.from(org.threeten.bp.LocalDate.parse(i.toString())));
             }
+
+            prefs.edit().putStringSet(StringConstants.HISTORY_SET, history).apply();
         }
 
         return extracted;

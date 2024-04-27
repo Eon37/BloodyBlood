@@ -19,7 +19,6 @@ import org.threeten.bp.LocalDate;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class OnDateSelectedListenerImpl implements OnDateSelectedListener {
     private final Context context;
@@ -33,48 +32,28 @@ public class OnDateSelectedListenerImpl implements OnDateSelectedListener {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean editModeEnabled = prefs.getBoolean(StringConstants.IS_EDIT_MODE_ENABLED, false);
 
-        if (!selected) return;
         if (!editModeEnabled) return;
-        if (date.isAfter(CalendarDay.from(LocalDate.now().minusDays(1)))) return;
 
-        Set<String> starts = new HashSet<>(prefs.getStringSet(StringConstants.STARTS_SET, new HashSet<>()));
-        Set<String> ends = new HashSet<>(prefs.getStringSet(StringConstants.ENDS_SET, new HashSet<>()));
-
-        if (starts.contains(date.getDate().toString())) {
-            //First day of the period tapped - remove
-            starts.remove(date.getDate().toString());
-            starts.add(date.getDate().plusDays(1).toString());
-        } else if (ends.contains(date.getDate().toString())) {
-            //Last day of the period tapped - remove
-            ends.remove(date.getDate().toString());
-            ends.add(date.getDate().minusDays(1).toString());
-        } else if (starts.contains(date.getDate().plusDays(1).toString())) {
-            //Pre first day of the period tapped - add
-            starts.remove(date.getDate().plusDays(1).toString());
-            starts.add(date.getDate().toString());
-        } else if (ends.contains(date.getDate().minusDays(1).toString())) {
-            //Next to last day of the period tapped - add
-            ends.remove(date.getDate().minusDays(1).toString());
-            ends.add(date.getDate().toString());
-        } else {
+        if (date.getDate().isAfter(LocalDate.now())) {
             AlertDialog dialog = new AlertDialog.Builder(context)
                     .setIcon(R.drawable.ic_launcher_foreground)
                     .setTitle("You cannot add or remove this day")
-                    .setMessage("To remove a day from a period tap the first or the last day of the period\n\n" +
-                                "To add a day to a period tap the previous to the first or the next to the last day of a period\n\n" +
-                                "You cannot add or remove day in the end of the current period")
+                    .setMessage("You cannot add or remove the day after the current date")
                     .create();
             dialog.show();
             return;
         }
 
-        prefs.edit().putStringSet(StringConstants.STARTS_SET, starts).apply();
-        prefs.edit().putStringSet(StringConstants.ENDS_SET, ends).apply();
+        Set<String> history = new HashSet<>(prefs.getStringSet(StringConstants.HISTORY_SET, new HashSet<>()));
+        if (history.contains(date.getDate().toString())) {
+            history.remove(date.getDate().toString());
+        } else {
+            history.add(date.getDate().toString());
+        }
+        prefs.edit().putStringSet(StringConstants.HISTORY_SET, history).apply();
 
         widget.removeDecorators();
-        widget.addDecorator(new CalendarHistoryDecorator(context, DateUtils.extractHistoryDays(
-                new TreeSet<>(starts),
-                new TreeSet<>(ends))));
+        widget.addDecorator(new CalendarHistoryDecorator(context, DateUtils.extractHistoryDays(context)));
         widget.clearSelection();
     }
 }
