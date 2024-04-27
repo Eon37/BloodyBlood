@@ -30,7 +30,8 @@ public class NotificationUtils {
     public static final String CHANNEL_ID = "com.eon37_dev.bloodyblood.channelId";
     public static final String CHANNEL_NAME = "bloodyblood";
 
-    private NotificationUtils() {}
+    private NotificationUtils() {
+    }
 
     public static void recalculateTimings(Context context, SharedPreferences sharedPreferences) {
         if (context == null) {
@@ -52,7 +53,7 @@ public class NotificationUtils {
             return;
         }
 
-        setMainNotification(context, true, calculateNext(LocalDate.now(), startDay, period));
+        setStartNotification(context, calculateNext(LocalDate.now(), startDay, period));
     }
 
     /**
@@ -60,9 +61,10 @@ public class NotificationUtils {
      * If start day is today then the next day is also today
      * If start day is in the past days of the current month, then the next day is after the period
      * If start day is later in the current month, then the next day is at that date
+     *
      * @param currentDate - today's date
-     * @param startDay - the day of the current month when already started or will start
-     * @param period - the period for calculating if the next day is in the current month/year
+     * @param startDay    - the day of the current month when already started or will start
+     * @param period      - the period for calculating if the next day is in the current month/year
      * @return the day to send notification
      */
     public static LocalDate calculateNext(LocalDate currentDate, int startDay, int period) {
@@ -84,49 +86,37 @@ public class NotificationUtils {
         return LocalDate.of(year, month, day);
     }
 
-    public static void setMainNotification(Context context, boolean isStart, LocalDate date) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int notificationTime = prefs.getInt(StringConstants.NOTIFICATION_TIME, 720);
-        int hour = notificationTime / 60;
-        int minute = notificationTime % 60;
+    public static void setStartNotification(Context context, LocalDate date) {
+        Intent firstIntent = new Intent(context, YesNoNotificationDisplayReceiver.class);
+        firstIntent.putExtra(StringConstants.IS_START_NOTIFICATION, true);
 
-        AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        Intent firstIntent = new Intent(context, MainNotificationDisplayReceiver.class);
-        firstIntent.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
-
-        RequestCodes code = isStart ? RequestCodes.MAIN_NOTIFICATION : RequestCodes.END_NOTIFICATION;
-        long nextAlarmTime = DateUtils.millisFromDate(date, hour, minute);
-
-        am.set(AlarmManager.RTC,
-                nextAlarmTime,
-                PendingIntent.getBroadcast(context, code.ordinal(), firstIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-
-        prefs.edit().putLong(code.name(), nextAlarmTime).apply();
+        setNotification(context, date, RequestCodes.START_NOTIFICATION, firstIntent);
     }
 
     public static void setEndNotification(Context context, LocalDate date) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean endEnabled = prefs.getBoolean(StringConstants.END_NOTIFICATION_ENABLED, false);
+
+        Intent endIntent = new Intent(context, endEnabled ? YesNoNotificationDisplayReceiver.class : SilentEndActionReceiver.class);
+        endIntent.putExtra(StringConstants.IS_START_NOTIFICATION, false);
+
+        setNotification(context, date, RequestCodes.END_NOTIFICATION, endIntent);
+    }
+
+    public static void setNotification(Context context, LocalDate date, RequestCodes requestCode, Intent intent) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int notificationTime = prefs.getInt(StringConstants.NOTIFICATION_TIME, 720);
         int hour = notificationTime / 60;
         int minute = notificationTime % 60;
 
-        boolean endEnabled = prefs.getBoolean(StringConstants.END_NOTIFICATION_ENABLED, false);
-        RequestCodes endCode = endEnabled ? RequestCodes.END_NOTIFICATION : RequestCodes.SILENT_END_ACTIONS;
-        Intent endIntent = new Intent(context, endEnabled ? MainNotificationDisplayReceiver.class : SilentEndActionReceiver.class);
-        endIntent.putExtra(StringConstants.IS_START_NOTIFICATION, false);
-        endIntent.putExtra(StringConstants.END_DATE, date.toEpochDay());
-        PendingIntent endPendingIntent = PendingIntent.getBroadcast(
-                context,
-                endCode.ordinal(),
-                endIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
         long nextAlarmTime = DateUtils.millisFromDate(date, hour, minute);
 
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        am.set(AlarmManager.RTC, nextAlarmTime, endPendingIntent);
+        am.set(AlarmManager.RTC,
+                nextAlarmTime,
+                PendingIntent.getBroadcast(context, requestCode.ordinal(), intent, PendingIntent.FLAG_UPDATE_CURRENT));
 
-        prefs.edit().putLong(endCode.name(), nextAlarmTime).apply();
+        prefs.edit().putLong(requestCode.name(), nextAlarmTime).apply();
     }
 
     public static Notification constructMainNotification(Context context, boolean isStart, boolean isCalmBg) {
@@ -159,11 +149,11 @@ public class NotificationUtils {
 
         return new Notification.Builder(context, NotificationUtils.CHANNEL_ID)
                 .setContentTitle(isStart
-                        ? prefs.getString(StringConstants.START_TITLE, "Well, well, well")
-                        : prefs.getString(StringConstants.END_TITLE, "Well, well, well"))
+                                 ? prefs.getString(StringConstants.START_TITLE, "Well, well, well")
+                                 : prefs.getString(StringConstants.END_TITLE, "Well, well, well"))
                 .setContentText(isStart
-                        ? prefs.getString(StringConstants.START_TEXT, "Are you bleeding already?")
-                        : prefs.getString(StringConstants.END_TEXT, "Have you stopped bleeding?"))
+                                ? prefs.getString(StringConstants.START_TEXT, "Are you bleeding already?")
+                                : prefs.getString(StringConstants.END_TEXT, "Have you stopped bleeding?"))
                 .setAutoCancel(false)
                 .setSmallIcon(R.drawable.blood_icon)
                 .addAction(yesAction)
@@ -177,7 +167,7 @@ public class NotificationUtils {
     public static Notification constructExactDayNotification(Context context, boolean isStart, boolean isCancel, int input) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        Notification.Builder builder =  new Notification.Builder(context, NotificationUtils.CHANNEL_ID)
+        Notification.Builder builder = new Notification.Builder(context, NotificationUtils.CHANNEL_ID)
                 .setContentTitle(prefs.getString(StringConstants.EXACT_TITLE, "At which day exactly?"))
                 .setAutoCancel(isCancel)
                 .setSmallIcon(R.drawable.blood_icon)

@@ -13,7 +13,7 @@ import androidx.preference.PreferenceManager;
 import com.eon37_dev.bloodyblood.StringConstants;
 import com.eon37_dev.bloodyblood.enums.NotificationIds;
 
-public class MainNotificationDisplayReceiver extends BroadcastReceiver {
+public class YesNoNotificationDisplayReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);

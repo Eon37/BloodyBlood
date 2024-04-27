@@ -20,6 +20,5 @@ public class StringConstants {
     public static final String EXACT_TITLE = "exactNotificationTitle";
     public static final String EXACT_TEXT = "exactNotificationText";
     public static final String IS_EDIT_MODE_ENABLED = "isEditModeEnabled";
-    public static final String END_DATE = "endDate";
     public static final String NOTIFICATION_TIME = "notificationTime";
 }

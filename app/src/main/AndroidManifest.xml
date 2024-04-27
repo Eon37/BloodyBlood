@@ -29,7 +29,7 @@
                 android:parentActivityName=".MainActivity"/>
         </activity>
 
-        <receiver android:name="com.eon37_dev.bloodyblood.notifications.MainNotificationDisplayReceiver"/>
+        <receiver android:name="com.eon37_dev.bloodyblood.notifications.YesNoNotificationDisplayReceiver"/>
         <receiver android:name="com.eon37_dev.bloodyblood.notifications.RepeatNotificationScheduleReceiver"/>
         <receiver android:name="com.eon37_dev.bloodyblood.notifications.AfterYesActionsReceiver"/>
         <receiver android:name="com.eon37_dev.bloodyblood.notifications.SilentEndActionReceiver"/>

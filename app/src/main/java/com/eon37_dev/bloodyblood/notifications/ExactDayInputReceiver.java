@@ -50,9 +50,8 @@ public class ExactDayInputReceiver extends BroadcastReceiver {
         DateUtils.saveHistory(prefs, exactDate, isStart);
 
         if (isStart) {
-            NotificationUtils.setMainNotification(
+            NotificationUtils.setStartNotification(
                     context,
-                    true,
                     exactDate.plusDays(period));
             NotificationUtils.setEndNotification(
                     context,

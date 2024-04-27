@@ -22,6 +22,10 @@ public class RepeatNotificationScheduleReceiver extends BroadcastReceiver {
         int repeatAfter = Integer.parseInt(prefs.getString(StringConstants.REPEAT_NOTIFICATION_AFTER, "5"));
         LocalDate repeatDate = LocalDate.now().plusDays(repeatAfter);
 
-        NotificationUtils.setMainNotification(context, isStart, repeatDate);
+        if (isStart) {
+            NotificationUtils.setStartNotification(context, repeatDate);
+        } else {
+            NotificationUtils.setEndNotification(context, repeatDate);
+        }
     }
 }

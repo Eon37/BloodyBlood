@@ -14,40 +14,41 @@ import com.eon37_dev.bloodyblood.enums.RequestCodes;
 public class RebootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        resetStartNotification(context);
+        resetEndNotification(context);
+    }
+
+    private void resetStartNotification(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        //reset start notification
-        long mainNotificationTime = prefs.getLong(RequestCodes.MAIN_NOTIFICATION.name(), 0);
+        Intent firstIntent = new Intent(context, YesNoNotificationDisplayReceiver.class);
+        firstIntent.putExtra(StringConstants.IS_START_NOTIFICATION, true);
 
-        if (mainNotificationTime > 0) {
-            Intent firstIntent = new Intent(context, MainNotificationDisplayReceiver.class);
-            firstIntent.putExtra(StringConstants.IS_START_NOTIFICATION, true);
-            PendingIntent mainPendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    RequestCodes.MAIN_NOTIFICATION.ordinal(),
-                    firstIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+        resetNotification(context, prefs, firstIntent);
+    }
 
-            am.set(AlarmManager.RTC, mainNotificationTime, mainPendingIntent);
-        }
-
-        //reset end notifications
+    private void resetEndNotification(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean endEnabled = prefs.getBoolean(StringConstants.END_NOTIFICATION_ENABLED, false);
 
-        RequestCodes endCode = endEnabled ? RequestCodes.END_NOTIFICATION : RequestCodes.SILENT_END_ACTIONS;
-        long endNotificationTime = prefs.getLong(endCode.name(), 0);
+        Intent endIntent = new Intent(context, endEnabled ? YesNoNotificationDisplayReceiver.class : SilentEndActionReceiver.class);
+        endIntent.putExtra(StringConstants.IS_START_NOTIFICATION, false);
 
-        if (endNotificationTime > 0) {
-            Intent endIntent = new Intent(context, endEnabled ? MainNotificationDisplayReceiver.class : SilentEndActionReceiver.class);
-            endIntent.putExtra(StringConstants.IS_START_NOTIFICATION, false);
+        resetNotification(context, prefs, endIntent);
+    }
+
+    private void resetNotification(Context context, SharedPreferences prefs, Intent intent) {
+        long notificationTime = prefs.getLong(RequestCodes.END_NOTIFICATION.name(), -1);
+
+        if (notificationTime >= 0) {
             PendingIntent endPendingIntent = PendingIntent.getBroadcast(
                     context,
-                    endCode.ordinal(),
-                    endIntent,
+                    RequestCodes.END_NOTIFICATION.ordinal(),
+                    intent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
-            am.set(AlarmManager.RTC, endNotificationTime, endPendingIntent);
+            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            am.set(AlarmManager.RTC, notificationTime, endPendingIntent);
         }
     }
 }

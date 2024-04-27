@@ -38,18 +38,15 @@ public class AfterYesActionsReceiver extends BroadcastReceiver {
             notificationManager.createNotificationChannel(channel);
             notificationManager.notify(NotificationIds.EXACT_DAY_NOTIFICATION.ordinal(), notification);
         } else {
+            DateUtils.saveHistory(prefs, LocalDate.now(), isStart);
+
             if (isStart) {
-                DateUtils.saveHistory(prefs, LocalDate.now(), true);
-                NotificationUtils.setMainNotification(
+                NotificationUtils.setStartNotification(
                         context,
-                        true,
                         LocalDate.now().plusDays(period));
                 NotificationUtils.setEndNotification(
                         context,
                         LocalDate.now().plusDays(duration));
-            } else {
-                LocalDate endDate = LocalDate.ofEpochDay(intent.getLongExtra(StringConstants.END_DATE, LocalDate.now().toEpochDay()));
-                DateUtils.saveHistory(prefs, endDate, false);
             }
         }
     }
