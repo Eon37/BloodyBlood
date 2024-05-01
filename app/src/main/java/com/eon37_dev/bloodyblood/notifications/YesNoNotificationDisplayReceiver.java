@@ -20,11 +20,11 @@ public class YesNoNotificationDisplayReceiver extends BroadcastReceiver {
         boolean isCalmBg = sharedPreferences.getBoolean(StringConstants.IS_CALM_BG, true);
         boolean isStart = intent.getBooleanExtra(StringConstants.IS_START_NOTIFICATION, true);
 
-        Notification notification = NotificationUtils.constructMainNotification(context, isStart, isCalmBg);
+        Notification notification = NotificationUtils.constructYesNoNotification(context, isStart, isCalmBg);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationChannel channel = new NotificationChannel(NotificationUtils.CHANNEL_ID, NotificationUtils.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
         notificationManager.createNotificationChannel(channel);
-        notificationManager.notify(NotificationIds.MAIN_NOTIFICATION.ordinal(), notification);
+        notificationManager.notify(NotificationIds.YES_NO_NOTIFICATION.ordinal(), notification);
     }
 }

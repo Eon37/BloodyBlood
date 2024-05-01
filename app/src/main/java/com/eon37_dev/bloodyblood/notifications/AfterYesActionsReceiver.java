@@ -20,7 +20,7 @@ public class AfterYesActionsReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        NotificationUtils.cancelNotification(context, NotificationIds.MAIN_NOTIFICATION);
+        NotificationUtils.cancelNotification(context, NotificationIds.YES_NO_NOTIFICATION);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         boolean exactDayEnabled = prefs.getBoolean(StringConstants.EXACT_DAY_ENABLED, false);

@@ -136,7 +136,7 @@ public class NotificationUtils {
         }
     }
 
-    public static Notification constructMainNotification(Context context, boolean isStart, boolean isCalmBg) {
+    public static Notification constructYesNoNotification(Context context, boolean isStart, boolean isCalmBg) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Intent afterStart = new Intent(context, AfterYesActionsReceiver.class);
         afterStart.putExtra(StringConstants.IS_START_NOTIFICATION, isStart);
