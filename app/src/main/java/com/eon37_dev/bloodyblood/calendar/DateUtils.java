@@ -28,8 +28,17 @@ public class DateUtils {
         if (isStart) {
             set.add(dateToSave.toString());
         } else {
-            for (LocalDate i = LocalDate.parse(set.last()); !i.isAfter(dateToSave); i = i.plusDays(1)) {
-                set.add(i.toString());
+            LocalDate lastSaved = LocalDate.parse(set.last());
+
+            if (lastSaved.isAfter(dateToSave)) {
+                //this is possible when app draws current period up to today and after that user specifies exact end day prior to today
+                for (LocalDate i = dateToSave.plusDays(1); !i.isAfter(lastSaved); i = i.plusDays(1)) {
+                    set.remove(i.toString());
+                }
+            } else {
+                for (LocalDate i = lastSaved; !i.isAfter(dateToSave); i = i.plusDays(1)) {
+                    set.add(i.toString());
+                }
             }
         }
 
