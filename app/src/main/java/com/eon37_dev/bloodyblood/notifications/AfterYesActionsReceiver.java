@@ -23,7 +23,7 @@ public class AfterYesActionsReceiver extends BroadcastReceiver {
         NotificationUtils.cancelNotification(context, NotificationIds.MAIN_NOTIFICATION);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        int duration = Integer.parseInt(prefs.getString(StringConstants.DURATION_KEY, "5"));
+        int duration = Integer.parseInt(prefs.getString(StringConstants.DURATION_KEY, "5")) - 1;
         int period = Integer.parseInt(prefs.getString(StringConstants.PERIOD_KEY, "31"));
         boolean exactDayEnabled = prefs.getBoolean(StringConstants.EXACT_DAY_ENABLED, false);
         boolean isStart = intent.getBooleanExtra(StringConstants.IS_START_NOTIFICATION, true);
