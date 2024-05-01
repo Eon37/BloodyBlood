@@ -24,7 +24,7 @@ public class RebootReceiver extends BroadcastReceiver {
         Intent firstIntent = new Intent(context, YesNoNotificationDisplayReceiver.class);
         firstIntent.putExtra(StringConstants.IS_START_NOTIFICATION, true);
 
-        resetNotification(context, prefs, firstIntent);
+        resetNotification(context, prefs, firstIntent, RequestCodes.START_NOTIFICATION);
     }
 
     private void resetEndNotification(Context context) {
@@ -34,16 +34,16 @@ public class RebootReceiver extends BroadcastReceiver {
         Intent endIntent = new Intent(context, endEnabled ? YesNoNotificationDisplayReceiver.class : SilentEndActionReceiver.class);
         endIntent.putExtra(StringConstants.IS_START_NOTIFICATION, false);
 
-        resetNotification(context, prefs, endIntent);
+        resetNotification(context, prefs, endIntent, RequestCodes.END_NOTIFICATION);
     }
 
-    private void resetNotification(Context context, SharedPreferences prefs, Intent intent) {
-        long notificationTime = prefs.getLong(RequestCodes.END_NOTIFICATION.name(), -1);
+    private void resetNotification(Context context, SharedPreferences prefs, Intent intent, RequestCodes requestCode) {
+        long notificationTime = prefs.getLong(requestCode.name(), -1);
 
         if (notificationTime >= 0) {
             PendingIntent endPendingIntent = PendingIntent.getBroadcast(
                     context,
-                    RequestCodes.END_NOTIFICATION.ordinal(),
+                    requestCode.ordinal(),
                     intent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 

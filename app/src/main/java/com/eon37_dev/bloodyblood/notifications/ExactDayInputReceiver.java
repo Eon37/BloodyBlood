@@ -21,8 +21,6 @@ public class ExactDayInputReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean isStart = intent.getBooleanExtra(StringConstants.IS_START_NOTIFICATION, true);
-        int period = Integer.parseInt(prefs.getString(StringConstants.PERIOD_KEY, "31"));
-        int duration = Integer.parseInt(prefs.getString(StringConstants.DURATION_KEY, "5")) - 1;
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationChannel channel = new NotificationChannel(NotificationUtils.CHANNEL_ID, NotificationUtils.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
         notificationManager.createNotificationChannel(channel);
@@ -48,15 +46,7 @@ public class ExactDayInputReceiver extends BroadcastReceiver {
                                       .withDayOfMonth(exactDay);
 
         DateUtils.saveHistory(prefs, exactDate, isStart);
-
-        if (isStart) {
-            NotificationUtils.setStartNotification(
-                    context,
-                    exactDate.plusDays(period));
-            NotificationUtils.setEndNotification(
-                    context,
-                    exactDate.plusDays(duration));
-        }
+        NotificationUtils.resetNotifications(context, prefs, isStart);
 
         notificationManager.notify(
                 NotificationIds.EXACT_DAY_NOTIFICATION.ordinal(),

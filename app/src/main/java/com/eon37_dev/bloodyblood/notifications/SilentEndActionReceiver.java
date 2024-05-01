@@ -9,6 +9,7 @@ import androidx.preference.PreferenceManager;
 
 import com.eon37_dev.bloodyblood.StringConstants;
 import com.eon37_dev.bloodyblood.calendar.DateUtils;
+import com.eon37_dev.bloodyblood.enums.RequestCodes;
 
 import java.time.LocalDate;
 
@@ -20,5 +21,8 @@ public class SilentEndActionReceiver extends BroadcastReceiver {
         prefs.edit().putBoolean(StringConstants.IS_CALM_BG, true).apply();
 
         DateUtils.saveHistory(prefs, LocalDate.now(), false);
+
+        //remove end time in the end of period as it already occurred and thus to not recreate notification on app reinstall or phone restarts
+        prefs.edit().remove(RequestCodes.END_NOTIFICATION.name()).apply();
     }
 }

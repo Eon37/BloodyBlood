@@ -119,6 +119,23 @@ public class NotificationUtils {
         prefs.edit().putLong(requestCode.name(), nextAlarmTime).apply();
     }
 
+    public static void resetNotifications(Context context, SharedPreferences prefs, boolean isStart) {
+        int duration = Integer.parseInt(prefs.getString(StringConstants.DURATION_KEY, "5")) - 1;
+        int period = Integer.parseInt(prefs.getString(StringConstants.PERIOD_KEY, "31"));
+
+        if (isStart) {
+            setStartNotification(
+                    context,
+                    LocalDate.now().plusDays(period));
+            setEndNotification(
+                    context,
+                    LocalDate.now().plusDays(duration));
+        } else {
+            //remove end time in the end of period as it already occurred and thus to not recreate notification on app reinstall or phone restarts
+            prefs.edit().remove(RequestCodes.END_NOTIFICATION.name()).apply();
+        }
+    }
+
     public static Notification constructMainNotification(Context context, boolean isStart, boolean isCalmBg) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Intent afterStart = new Intent(context, AfterYesActionsReceiver.class);
